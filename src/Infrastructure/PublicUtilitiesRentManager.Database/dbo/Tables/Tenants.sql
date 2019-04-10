@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Tenants]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Name] NVARCHAR(50) NOT NULL,
+	[Address] NVARCHAR(MAX) NOT NULL, 
+    [PhoneNumber] NVARCHAR(50) NULL, 
+    CONSTRAINT [PK_Tenants] PRIMARY KEY CLUSTERED ([Id] ASC)
+)
