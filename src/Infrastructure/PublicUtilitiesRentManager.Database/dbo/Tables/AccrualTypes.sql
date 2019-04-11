@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[AccrualType]
+﻿CREATE TABLE [dbo].[AccrualTypes]
 (
 	[Id] UNIQUEIDENTIFIER NOT NULL,
 	[Name] NVARCHAR(50) NOT NULL,
