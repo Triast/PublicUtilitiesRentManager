@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Payments]
 (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
-    [ContractId] UNIQUEIDENTIFIER NOT NULL, 
+	[Id] NVARCHAR(128) NOT NULL,
+    [ContractId] NVARCHAR(128) NOT NULL, 
     [PaymentDate] DATE NOT NULL, 
     [Summ] DECIMAL(19, 4) NOT NULL, 
     CONSTRAINT [PK_Payments] PRIMARY KEY CLUSTERED ([Id] ASC),

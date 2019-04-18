@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Rooms]
 (
-	[Id] UNIQUEIDENTIFIER NOT NULL, 
+	[Id] NVARCHAR(128) NOT NULL, 
     [Address] NVARCHAR(MAX) NOT NULL, 
     [RoomType] NVARCHAR(50) NOT NULL, 
     [Square] FLOAT NOT NULL, 

@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManger.WebUI.Controllers
 {
-    public class TenantsController : Controller
+    public class RoomsController : Controller
     {
-        private readonly ITenantRepository _repository;
+        private readonly IRoomRepository _repository;
 
-        public TenantsController(ITenantRepository repository)
+        public RoomsController(IRoomRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<ActionResult> Index() => View(await _repository.GetAllAsync());
 
-        public async Task<ActionResult> Details(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Details(string id) => View(await _repository.GetByAddressAsync(id));
 
         public ActionResult Create()
         {
@@ -25,9 +25,9 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Tenant tenant)
+        public async Task<ActionResult> Create(Room room)
         {
-            tenant.Id = System.Guid.NewGuid().ToString();
+            room.Id = System.Guid.NewGuid().ToString();
 
             if (!ModelState.IsValid)
             {
@@ -36,52 +36,52 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
 
             try
             {
-                await _repository.AddAsync(tenant);
+                await _repository.AddAsync(room);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(tenant);
+                return View(room);
             }
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var tenant = await _repository.GetByNameAsync(id);
+            var room = await _repository.GetByAddressAsync(id);
 
-            return View(tenant);
+            return View(room);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Tenant tenant)
+        public async Task<ActionResult> Edit(Room room)
         {
             if (!ModelState.IsValid)
             {
-                return View(tenant);
+                return View(room);
             }
 
             try
             {
-                await _repository.UpdateAsync(tenant);
+                await _repository.UpdateAsync(room);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(tenant);
+                return View(room);
             }
         }
 
-        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByAddressAsync(id));
 
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirm(string id)
         {
             try
             {
-                await _repository.RemoveByNameAsync(id);
+                await _repository.RemoveByAddressAsync(id);
 
                 return RedirectToAction(nameof(Index));
             }

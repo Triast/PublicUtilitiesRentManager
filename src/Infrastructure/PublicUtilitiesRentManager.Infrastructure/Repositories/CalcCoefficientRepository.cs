@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 {
-    public class CalcCoefficientRepository : IRepository<CalcCoefficient>
+    public class CalcCoefficientRepository : ICalcCoefficientRepository
     {
         private readonly string _connectionString;
 
@@ -25,10 +25,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task<CalcCoefficient> GetByIdAsync(string id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Id = @Id;", new { Id = id }).ContinueWith(calcCoefficients =>
             {
-                return connection.QuerySingleAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Id = @Id;", new { Id = id });
-            }
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
         }
 
         public IEnumerable<CalcCoefficient> GetAll()
@@ -41,10 +45,34 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<CalcCoefficient>> GetAllAsync()
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients;").ContinueWith(calcCoefficients =>
+            {
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
+        }
+
+        public CalcCoefficient GetByCondition(string condition)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QueryAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients;");
+                return connection.QuerySingle<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Condition = @Condition;", new { Condition = condition });
             }
+        }
+
+        public Task<CalcCoefficient> GetByConditionAsync(string condition)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Condition = @Condition;", new { Condition = condition }).ContinueWith(calcCoefficients =>
+            {
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
         }
 
         public void Add(CalcCoefficient item)
@@ -56,10 +84,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task AddAsync(CalcCoefficient item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("INSERT INTO CalcCoefficients VALUES (@Id, @Condition, @Coefficient)", item).ContinueWith(calcCoefficients =>
             {
-                return connection.ExecuteAsync("INSERT INTO CalcCoefficients VALUES (@Id, @Condition, @Coefficient)", item);
-            }
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
         }
 
         public void Update(CalcCoefficient item)
@@ -72,10 +104,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task UpdateAsync(CalcCoefficient item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("UPDATE CalcCoefficients SET Name = @Name, Condition = @Condition, Coefficient = @Coefficient WHERE Id = @Id", item).ContinueWith(calcCoefficients =>
             {
-                return connection.ExecuteAsync("UPDATE CalcCoefficients SET Name = @Name, Condition = @Condition, Coefficient = @Coefficient WHERE Id = @Id", item);
-            }
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
         }
 
         public void Remove(string id)
@@ -87,10 +123,33 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task RemoveAsync(string id)
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM CalcCoefficients WHERE Id = @Id", new { Id = id }).ContinueWith(calcCoefficients =>
+            {
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
+        }
+
+        public void RemoveByCondition(string condition)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.ExecuteAsync("DELETE FROM CalcCoefficients WHERE Id = @Id", new { Id = id });
+                connection.Execute("DELETE FROM CalcCoefficients WHERE Condition = @Condition", new { Condition = condition });
             }
+        }
+        public Task RemoveByConditionAsync(string condition)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM CalcCoefficients WHERE Condition = @Condition", new { Condition = condition }).ContinueWith(calcCoefficients =>
+            {
+                connection.Dispose();
+
+                return calcCoefficients.Result;
+            });
         }
     }
 }

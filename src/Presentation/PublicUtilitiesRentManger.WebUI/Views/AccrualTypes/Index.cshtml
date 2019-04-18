@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PublicUtilitiesRentManager.Domain.Entities.Tenant>
+﻿@model IEnumerable<PublicUtilitiesRentManager.Domain.Entities.AccrualType>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,12 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -29,12 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Name }) |

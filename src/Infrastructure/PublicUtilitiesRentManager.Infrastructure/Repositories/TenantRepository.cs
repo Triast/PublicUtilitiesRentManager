@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 {
-    public class TenantRepository : IRepository<Tenant>
+    public class TenantRepository : ITenantRepository
     {
         private readonly string _connectionString;
 
@@ -25,10 +25,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task<Tenant> GetByIdAsync(string id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<Tenant>("SELECT * FROM Tenants WHERE Id = @Id;", new { Id = id }).ContinueWith(tenants =>
             {
-                return connection.QuerySingleAsync<Tenant>("SELECT * FROM Tenants WHERE Id = @Id;", new { Id = id });
-            }
+                connection.Dispose();
+
+                return tenants.Result;
+            });
         }
 
         public IEnumerable<Tenant> GetAll()
@@ -41,10 +45,34 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<Tenant>> GetAllAsync()
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<Tenant>("SELECT * FROM Tenants;").ContinueWith(tenants =>
+            {
+                connection.Dispose();
+
+                return tenants.Result;
+            });
+        }
+
+        public Tenant GetByName(string name)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QueryAsync<Tenant>("SELECT * FROM Tenants;");
+                return connection.QuerySingle<Tenant>("SELECT * FROM Tenants WHERE Name = @Name;", new { Name = name });
             }
+        }
+
+        public Task<Tenant> GetByNameAsync(string name)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<Tenant>("SELECT * FROM Tenants WHERE Name = @Name;", new { Name = name }).ContinueWith(tenants =>
+            {
+                connection.Dispose();
+
+                return tenants.Result;
+            });
         }
 
         public void Add(Tenant item)
@@ -56,10 +84,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task AddAsync(Tenant item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("INSERT INTO Tenants VALUES (@Id, @Name, @Address, @PhoneNumber)", item).ContinueWith(tenants =>
             {
-                return connection.ExecuteAsync("INSERT INTO Tenants VALUES (@Id, @Name, @Address, @PhoneNumber)", item);
-            }
+                connection.Dispose();
+
+                return tenants.Result;
+            });
         }
 
         public void Update(Tenant item)
@@ -72,10 +104,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task UpdateAsync(Tenant item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("UPDATE Tenants SET Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item).ContinueWith(tenants =>
             {
-                return connection.ExecuteAsync("UPDATE Tenants SET Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item);
-            }
+                connection.Dispose();
+
+                return tenants.Result;
+            });
         }
 
         public void Remove(string id)
@@ -87,10 +123,33 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task RemoveAsync(string id)
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM Tenants WHERE Id = @Id", new { Id = id }).ContinueWith(tenants =>
+            {
+                connection.Dispose();
+
+                return tenants.Result;
+            });
+        }
+
+        public void RemoveByName(string name)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.ExecuteAsync("DELETE FROM Tenants WHERE Id = @Id", new { Id = id });
+                connection.Execute("DELETE FROM Tenants WHERE Name = @Name", new { Name = name });
             }
+        }
+        public Task RemoveByNameAsync(string name)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM Tenants WHERE Name = @Name", new { Name = name }).ContinueWith(tenants =>
+            {
+                connection.Dispose();
+
+                return tenants.Result;
+            });
         }
     }
 }

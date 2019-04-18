@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 {
-    public class AccrualTypeRepository : IRepository<AccrualType>
+    public class AccrualTypeRepository : IAccrualTypeRepository
     {
         private readonly string _connectionString;
 
@@ -25,10 +25,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task<AccrualType> GetByIdAsync(string id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Id = @Id;", new { Id = id }).ContinueWith(accrualTypes =>
             {
-                return connection.QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Id = @Id;", new { Id = id });
-            }
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
         }
 
         public IEnumerable<AccrualType> GetAll()
@@ -41,10 +45,34 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<AccrualType>> GetAllAsync()
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<AccrualType>("SELECT * FROM AccrualTypes;").ContinueWith(accrualTypes =>
+            {
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
+        }
+
+        public AccrualType GetByName(string name)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QueryAsync<AccrualType>("SELECT * FROM AccrualTypes;");
+                return connection.QuerySingle<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name });
             }
+        }
+
+        public Task<AccrualType> GetByNameAsync(string name)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name }).ContinueWith(accrualTypes =>
+            {
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
         }
 
         public void Add(AccrualType item)
@@ -56,10 +84,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task AddAsync(AccrualType item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("INSERT INTO AccrualTypes VALUES (@Id, @Name)", item).ContinueWith(accrualTypes =>
             {
-                return connection.ExecuteAsync("INSERT INTO AccrualTypes VALUES (@Id, @Name)", item);
-            }
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
         }
 
         public void Update(AccrualType item)
@@ -72,10 +104,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task UpdateAsync(AccrualType item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("UPDATE AccrualTypes SET Name = @Name WHERE Id = @Id", item).ContinueWith(accrualTypes =>
             {
-                return connection.ExecuteAsync("UPDATE AccrualTypes SET Name = @Name WHERE Id = @Id", item);
-            }
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
         }
 
         public void Remove(string id)
@@ -87,10 +123,33 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task RemoveAsync(string id)
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM AccrualTypes WHERE Id = @Id", new { Id = id }).ContinueWith(accrualTypes =>
+            {
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
+        }
+
+        public void RemoveByName(string name)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.ExecuteAsync("DELETE FROM AccrualTypes WHERE Id = @Id", new { Id = id });
+                connection.Execute("DELETE FROM AccrualTypes WHERE Name = @Name", new { Name = name });
             }
+        }
+        public Task RemoveByNameAsync(string name)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM AccrualTypes WHERE Name = @Name", new { Name = name }).ContinueWith(accrualTypes =>
+            {
+                connection.Dispose();
+
+                return accrualTypes.Result;
+            });
         }
     }
 }

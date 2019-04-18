@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Tenants]
 (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(128) NOT NULL,
 	[Name] NVARCHAR(50) NOT NULL,
 	[Address] NVARCHAR(MAX) NOT NULL, 
     [PhoneNumber] NVARCHAR(50) NULL, 

@@ -1,12 +1,13 @@
 ﻿using Dapper;
 using PublicUtilitiesRentManager.Domain.Entities;
+using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 {
-    public class RoomRepository
+    public class RoomRepository : IRoomRepository
     {
         private readonly string _connectionString;
 
@@ -24,10 +25,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task<Room> GetByIdAsync(string id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id }).ContinueWith(rooms =>
             {
-                return connection.QuerySingleAsync<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id });
-            }
+                connection.Dispose();
+
+                return rooms.Result;
+            });
         }
 
         public IEnumerable<Room> GetAll()
@@ -40,10 +45,34 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<Room>> GetAllAsync()
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<Room>("SELECT * FROM Rooms;").ContinueWith(rooms =>
+            {
+                connection.Dispose();
+
+                return rooms.Result;
+            });
+        }
+
+        public Room GetByAddress(string address)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QueryAsync<Room>("SELECT * FROM Rooms;");
+                return connection.QuerySingle<Room>("SELECT * FROM Rooms WHERE Address = @Address;", new { Address = address });
             }
+        }
+
+        public Task<Room> GetByAddressAsync(string address)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<Room>("SELECT * FROM Address WHERE Address = @Address;", new { Address = address }).ContinueWith(rooms =>
+            {
+                connection.Dispose();
+
+                return rooms.Result;
+            });
         }
 
         public void Add(Room item)
@@ -55,10 +84,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task AddAsync(Room item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item).ContinueWith(rooms =>
             {
-                return connection.ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item);
-            }
+                connection.Dispose();
+
+                return rooms.Result;
+            });
         }
 
         public void Update(Room item)
@@ -71,10 +104,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task UpdateAsync(Room item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item).ContinueWith(rooms =>
             {
-                return connection.ExecuteAsync("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item);
-            }
+                connection.Dispose();
+
+                return rooms.Result;
+            });
         }
 
         public void Remove(string id)
@@ -86,10 +123,33 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task RemoveAsync(string id)
         {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Id = @Id", new { Id = id }).ContinueWith(rooms =>
+            {
+                connection.Dispose();
+
+                return rooms.Result;
+            });
+        }
+
+        public void RemoveByAddress(string address)
+        {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.ExecuteAsync("DELETE FROM Rooms WHERE Id = @Id", new { Id = id });
+                connection.Execute("DELETE FROM Rooms WHERE Address = @Address", new { Address = address });
             }
+        }
+        public Task RemoveByAddressAsync(string address)
+        {
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Address = @Address", new { Address = address }).ContinueWith(rooms =>
+            {
+                connection.Dispose();
+
+                return rooms.Result;
+            });
         }
     }
 }
