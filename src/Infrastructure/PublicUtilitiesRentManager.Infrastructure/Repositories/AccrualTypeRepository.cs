@@ -27,7 +27,9 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Id = @Id;", new { Id = id }).ContinueWith(accrualTypes =>
+            return connection
+                .QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Id = @Id;", new { Id = id })
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 
@@ -47,7 +49,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QueryAsync<AccrualType>("SELECT * FROM AccrualTypes;").ContinueWith(accrualTypes =>
+            return connection.QueryAsync<AccrualType>("SELECT * FROM AccrualTypes;")
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 
@@ -59,7 +62,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QuerySingle<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name });
+                return connection
+                    .QuerySingle<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name });
             }
         }
 
@@ -67,7 +71,9 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name }).ContinueWith(accrualTypes =>
+            return connection
+                .QuerySingleAsync<AccrualType>("SELECT * FROM AccrualTypes WHERE Name = @Name;", new { Name = name })
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 
@@ -86,7 +92,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("INSERT INTO AccrualTypes VALUES (@Id, @Name)", item).ContinueWith(accrualTypes =>
+            return connection.ExecuteAsync("INSERT INTO AccrualTypes VALUES (@Id, @Name)", item)
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 
@@ -106,7 +113,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("UPDATE AccrualTypes SET Name = @Name WHERE Id = @Id", item).ContinueWith(accrualTypes =>
+            return connection.ExecuteAsync("UPDATE AccrualTypes SET Name = @Name WHERE Id = @Id", item)
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 
@@ -144,7 +152,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("DELETE FROM AccrualTypes WHERE Name = @Name", new { Name = name }).ContinueWith(accrualTypes =>
+            return connection.ExecuteAsync("DELETE FROM AccrualTypes WHERE Name = @Name", new { Name = name })
+                .ContinueWith(accrualTypes =>
             {
                 connection.Dispose();
 

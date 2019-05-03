@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManger.WebUI.Controllers
 {
+    [Authorize(Roles = "Administrator,Manager")]
     public class CalcCoefficientsController : Controller
     {
         private readonly ICalcCoefficientRepository _repository;
@@ -18,11 +20,13 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
 
         public async Task<ActionResult> Details(string id) => View(await _repository.GetByConditionAsync(id));
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CalcCoefficient calcCoefficient)
@@ -46,6 +50,7 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(string id)
         {
             var calcCoefficient = await _repository.GetByConditionAsync(id);
@@ -53,6 +58,7 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
             return View(calcCoefficient);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(CalcCoefficient calcCoefficient)
@@ -74,8 +80,10 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Delete(string id) => View(await _repository.GetByConditionAsync(id));
 
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirm(string id)
         {

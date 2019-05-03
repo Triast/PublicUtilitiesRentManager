@@ -20,14 +20,17 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QuerySingle<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id });
+                return connection
+                    .QuerySingle<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id });
             }
         }
         public Task<Room> GetByIdAsync(string id)
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QuerySingleAsync<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id }).ContinueWith(rooms =>
+            return connection
+                .QuerySingleAsync<Room>("SELECT * FROM Rooms WHERE Id = @Id;", new { Id = id })
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -47,7 +50,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QueryAsync<Room>("SELECT * FROM Rooms;").ContinueWith(rooms =>
+            return connection.QueryAsync<Room>("SELECT * FROM Rooms;")
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -59,7 +63,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return connection.QuerySingle<Room>("SELECT * FROM Rooms WHERE Address = @Address;", new { Address = address });
+                return connection
+                    .QuerySingle<Room>("SELECT * FROM Rooms WHERE Address = @Address;", new { Address = address });
             }
         }
 
@@ -67,7 +72,9 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.QuerySingleAsync<Room>("SELECT * FROM Address WHERE Address = @Address;", new { Address = address }).ContinueWith(rooms =>
+            return connection
+                .QuerySingleAsync<Room>("SELECT * FROM Rooms WHERE Address = @Address;", new { Address = address })
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -79,14 +86,17 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Execute("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item);
+                connection
+                    .Execute("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item);
             }
         }
         public Task AddAsync(Room item)
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item).ContinueWith(rooms =>
+            return connection
+                .ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item)
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -98,7 +108,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Execute("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item);
+                connection
+                    .Execute("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item);
             }
         }
 
@@ -106,7 +117,9 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item).ContinueWith(rooms =>
+            return connection
+                .ExecuteAsync("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item)
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -125,7 +138,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Id = @Id", new { Id = id }).ContinueWith(rooms =>
+            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Id = @Id", new { Id = id })
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 
@@ -144,7 +158,8 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Address = @Address", new { Address = address }).ContinueWith(rooms =>
+            return connection.ExecuteAsync("DELETE FROM Rooms WHERE Address = @Address", new { Address = address })
+                .ContinueWith(rooms =>
             {
                 connection.Dispose();
 

@@ -1,11 +1,14 @@
+using AspNetCore.Identity.Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.Infrastructure.Repositories;
+using System;
 
 namespace PublicUtilitiesRentManger.WebUI
 {
@@ -27,6 +30,45 @@ namespace PublicUtilitiesRentManger.WebUI
             });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddUserManager<UserManager<ApplicationUser>>()
+                .AddRoleManager<RoleManager<ApplicationRole>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
+                .AddDapperStores(connectionString)
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
             services.AddTransient<ITenantRepository, TenantRepository>(_ => new TenantRepository(connectionString));
             services.AddTransient<IRoomRepository, RoomRepository>(_ => new RoomRepository(connectionString));
@@ -51,6 +93,8 @@ namespace PublicUtilitiesRentManger.WebUI
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseRouting(routes =>
             {

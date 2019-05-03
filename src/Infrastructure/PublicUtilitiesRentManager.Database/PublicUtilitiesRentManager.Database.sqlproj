@@ -60,6 +60,8 @@
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Post" />
     <Folder Include="dbo\Post\Seeding" />
+    <Folder Include="dbo\Tables\Identity" />
+    <Folder Include="dbo\Post\Seeding\Identity" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Accruals.sql" />
@@ -69,6 +71,13 @@
     <Build Include="dbo\Tables\Rooms.sql" />
     <Build Include="dbo\Tables\Tenants.sql" />
     <Build Include="dbo\Tables\Payments.sql" />
+    <Build Include="dbo\Tables\Identity\RoleClaims.sql" />
+    <Build Include="dbo\Tables\Identity\Roles.sql" />
+    <Build Include="dbo\Tables\Identity\UserClaims.sql" />
+    <Build Include="dbo\Tables\Identity\UserLogins.sql" />
+    <Build Include="dbo\Tables\Identity\UserRoles.sql" />
+    <Build Include="dbo\Tables\Identity\Users.sql" />
+    <Build Include="dbo\Tables\Identity\UserTokens.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post\Script.PostDeployment.sql" />
@@ -83,5 +92,8 @@
     <None Include="dbo\Post\Seeding\AccrualsSeed.sql" />
     <None Include="dbo\Post\Seeding\PaymentsSeed.sql" />
     <None Include="PublicUtilitiesRentManager.Database.publish.xml" />
+    <None Include="dbo\Post\Seeding\Identity\RolesSeed.sql" />
+    <None Include="dbo\Post\Seeding\Identity\UsersSeed.sql" />
+    <None Include="dbo\Post\Seeding\Identity\UserRolesSeed.sql" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,10 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+:r .\Seeding\Identity\RolesSeed.sql
+:r .\Seeding\Identity\UsersSeed.sql
+:r .\Seeding\Identity\UserRolesSeed.sql
+
 :r .\Seeding\TenantsSeed.sql
 :r .\Seeding\RoomsSeed.sql
 :r .\Seeding\AccrualTypesSeed.sql
