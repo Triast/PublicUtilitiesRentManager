@@ -4,14 +4,14 @@ using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using System.Threading.Tasks;
 
-namespace PublicUtilitiesRentManger.WebUI.Controllers
+namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     [Authorize(Roles = "Administrator,Manager")]
-    public class TenantsController : Controller
+    public class AccrualTypesController : Controller
     {
-        private readonly ITenantRepository _repository;
+        private readonly IAccrualTypeRepository _repository;
 
-        public TenantsController(ITenantRepository repository)
+        public AccrualTypesController(IAccrualTypeRepository repository)
         {
             _repository = repository;
         }
@@ -29,9 +29,9 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Tenant tenant)
+        public async Task<ActionResult> Create(AccrualType accrualType)
         {
-            tenant.Id = System.Guid.NewGuid().ToString();
+            accrualType.Id = System.Guid.NewGuid().ToString();
 
             if (!ModelState.IsValid)
             {
@@ -40,43 +40,43 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
 
             try
             {
-                await _repository.AddAsync(tenant);
+                await _repository.AddAsync(accrualType);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(tenant);
+                return View(accrualType);
             }
         }
 
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(string id)
         {
-            var tenant = await _repository.GetByNameAsync(id);
+            var accrualType = await _repository.GetByNameAsync(id);
 
-            return View(tenant);
+            return View(accrualType);
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Tenant tenant)
+        public async Task<ActionResult> Edit(AccrualType accrualType)
         {
             if (!ModelState.IsValid)
             {
-                return View(tenant);
+                return View(accrualType);
             }
 
             try
             {
-                await _repository.UpdateAsync(tenant);
+                await _repository.UpdateAsync(accrualType);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(tenant);
+                return View(accrualType);
             }
         }
 

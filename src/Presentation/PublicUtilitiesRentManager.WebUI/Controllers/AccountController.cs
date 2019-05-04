@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PublicUtilitiesRentManger.WebUI.Models.AccountViewModels;
+using PublicUtilitiesRentManager.WebUI.Models.AccountViewModels;
 using System.Threading.Tasks;
 
-namespace PublicUtilitiesRentManger.WebUI.Controllers
+namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     public class AccountController : Controller
     {

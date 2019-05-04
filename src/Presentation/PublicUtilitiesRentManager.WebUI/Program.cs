@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace PublicUtilitiesRentManger.WebUI
+namespace PublicUtilitiesRentManager.WebUI
 {
     public class Program
     {

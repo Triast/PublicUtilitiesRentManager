@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PublicUtilitiesRentManger.WebUI.Models;
+using PublicUtilitiesRentManager.WebUI.Models;
 
-namespace PublicUtilitiesRentManger.WebUI.Controllers
+namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     public class HomeController : Controller
     {

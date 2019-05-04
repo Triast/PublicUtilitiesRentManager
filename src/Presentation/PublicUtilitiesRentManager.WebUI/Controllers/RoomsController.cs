@@ -4,21 +4,21 @@ using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using System.Threading.Tasks;
 
-namespace PublicUtilitiesRentManger.WebUI.Controllers
+namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     [Authorize(Roles = "Administrator,Manager")]
-    public class AccrualTypesController : Controller
+    public class RoomsController : Controller
     {
-        private readonly IAccrualTypeRepository _repository;
+        private readonly IRoomRepository _repository;
 
-        public AccrualTypesController(IAccrualTypeRepository repository)
+        public RoomsController(IRoomRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<ActionResult> Index() => View(await _repository.GetAllAsync());
 
-        public async Task<ActionResult> Details(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Details(string id) => View(await _repository.GetByAddressAsync(id));
 
         [Authorize(Roles = "Administrator")]
         public ActionResult Create()
@@ -29,9 +29,9 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AccrualType accrualType)
+        public async Task<ActionResult> Create(Room room)
         {
-            accrualType.Id = System.Guid.NewGuid().ToString();
+            room.Id = System.Guid.NewGuid().ToString();
 
             if (!ModelState.IsValid)
             {
@@ -40,48 +40,48 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
 
             try
             {
-                await _repository.AddAsync(accrualType);
+                await _repository.AddAsync(room);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(accrualType);
+                return View(room);
             }
         }
 
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Edit(string id)
         {
-            var accrualType = await _repository.GetByNameAsync(id);
+            var room = await _repository.GetByAddressAsync(id);
 
-            return View(accrualType);
+            return View(room);
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(AccrualType accrualType)
+        public async Task<ActionResult> Edit(Room room)
         {
             if (!ModelState.IsValid)
             {
-                return View(accrualType);
+                return View(room);
             }
 
             try
             {
-                await _repository.UpdateAsync(accrualType);
+                await _repository.UpdateAsync(room);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(accrualType);
+                return View(room);
             }
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByAddressAsync(id));
 
         [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
@@ -89,7 +89,7 @@ namespace PublicUtilitiesRentManger.WebUI.Controllers
         {
             try
             {
-                await _repository.RemoveByNameAsync(id);
+                await _repository.RemoveByAddressAsync(id);
 
                 return RedirectToAction(nameof(Index));
             }

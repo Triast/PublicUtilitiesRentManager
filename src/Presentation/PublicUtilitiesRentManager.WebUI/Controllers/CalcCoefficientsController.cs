@@ -4,7 +4,7 @@ using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using System.Threading.Tasks;
 
-namespace PublicUtilitiesRentManger.WebUI.Controllers
+namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     [Authorize(Roles = "Administrator,Manager")]
     public class CalcCoefficientsController : Controller

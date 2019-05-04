@@ -1,6 +1,6 @@
 using System;
 
-namespace PublicUtilitiesRentManger.WebUI.Models
+namespace PublicUtilitiesRentManager.WebUI.Models
 {
     public class ErrorViewModel
     {

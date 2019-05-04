@@ -10,7 +10,7 @@ using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.Infrastructure.Repositories;
 using System;
 
-namespace PublicUtilitiesRentManger.WebUI
+namespace PublicUtilitiesRentManager.WebUI
 {
     public class Startup
     {

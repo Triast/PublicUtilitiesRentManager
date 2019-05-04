@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PublicUtilitiesRentManger.WebUI.Models.AccountViewModels
+namespace PublicUtilitiesRentManager.WebUI.Models.AccountViewModels
 {
     public class LoginViewModel
     {
