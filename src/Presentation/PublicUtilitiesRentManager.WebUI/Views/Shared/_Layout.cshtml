@@ -21,7 +21,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PublicUtilitiesRentManger.WebUI</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Учёт Аренды</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,12 +30,23 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Политика конфиденциальности</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Администрирование
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="Tenants" asp-action="Index">Арендаторы</a>
+                                <a class="dropdown-item" asp-controller="Rooms" asp-action="Index">Помещения</a>
+                                <a class="dropdown-item" asp-controller="AccrualTypes" asp-action="Index">Виды начислений</a>
+                                <a class="dropdown-item" asp-controller="CalcCoefficients" asp-action="Index">Коэффициенты расчётов</a>
+                            </div>
+                        </li>
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Tenants" asp-action="Index">Арендаторы</a>
                         </li>
                         <li class="nav-item">
@@ -46,7 +57,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="CalcCoefficients" asp-action="Index">Коэффициенты расчётов</a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
