@@ -1,14 +1,17 @@
-﻿@model IEnumerable<PublicUtilitiesRentManager.Domain.Entities.Room>
+﻿@model IEnumerable<RoomViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Помещения";
 }
 
-<h1>Index</h1>
+<h1>Помещения</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Создать</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -31,29 +34,36 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Square)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOccupied)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Address }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Address }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Address })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Square)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsOccupied)
+                </td>
+                <td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Address }) <span>|</span>
+                    }
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.Address })
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span>|</span> @Html.ActionLink("Удалить", "Delete", new { id = item.Address })
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

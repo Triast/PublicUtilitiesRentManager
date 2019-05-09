@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
+using PublicUtilitiesRentManager.WebUI.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
@@ -16,9 +18,11 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             _repository = repository;
         }
 
-        public async Task<ActionResult> Index() => View(await _repository.GetAllAsync());
+        public async Task<ActionResult> Index() =>
+            View((await _repository.GetAllAsync()).Select(RoomViewModel.FromRoom));
 
-        public async Task<ActionResult> Details(string id) => View(await _repository.GetByAddressAsync(id));
+        public async Task<ActionResult> Details(string id) =>
+            View(RoomViewModel.FromRoom(await _repository.GetByAddressAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         public ActionResult Create()
@@ -51,12 +55,8 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Edit(string id)
-        {
-            var room = await _repository.GetByAddressAsync(id);
-
-            return View(room);
-        }
+        public async Task<ActionResult> Edit(string id) =>
+            View(RoomViewModel.FromRoom(await _repository.GetByAddressAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
@@ -81,7 +81,8 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByAddressAsync(id));
+        public async Task<ActionResult> Delete(string id) =>
+            View(RoomViewModel.FromRoom(await _repository.GetByAddressAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]

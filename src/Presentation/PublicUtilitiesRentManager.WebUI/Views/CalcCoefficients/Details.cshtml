@@ -1,13 +1,13 @@
-﻿@model PublicUtilitiesRentManager.Domain.Entities.CalcCoefficient
+﻿@model CalcCoefficientViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробнее";
 }
 
-<h1>Details</h1>
+<h1>Подробнее</h1>
 
 <div>
-    <h4>CalcCoefficient</h4>
+    <h4>Коэффициент расчёта</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -25,6 +25,9 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Condition }) |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole("Administrator"))
+    {
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Condition }) <span>|</span>
+    }
+    <a asp-action="Index">Вернуться к списку</a>
 </div>

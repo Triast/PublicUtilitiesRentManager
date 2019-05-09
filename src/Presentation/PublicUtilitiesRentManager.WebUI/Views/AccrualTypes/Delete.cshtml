@@ -1,14 +1,14 @@
-﻿@model PublicUtilitiesRentManager.Domain.Entities.AccrualType
+﻿@model AccrualTypeViewModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление";
 }
 
-<h1>Delete</h1>
+<h1>Удаление</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы уверены, что желаете удалить этот вид начисления?</h3>
 <div>
-    <h4>AccrualType</h4>
+    <h4>Вид начисления</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -20,7 +20,7 @@
     </dl>
     
     <form asp-action="DeleteConfirm" asp-route-id="@Model.Name">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернуться к списку</a>
     </form>
 </div>

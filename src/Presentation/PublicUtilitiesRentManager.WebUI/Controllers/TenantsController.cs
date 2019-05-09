@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
+using PublicUtilitiesRentManager.WebUI.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    // Todo: Add Automapper. Think about domain entities in Create, Update and Delete methods.
     [Authorize(Roles = "Administrator,Manager")]
     public class TenantsController : Controller
     {
@@ -16,9 +19,11 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             _repository = repository;
         }
 
-        public async Task<ActionResult> Index() => View(await _repository.GetAllAsync());
+        public async Task<ActionResult> Index() =>
+            View((await _repository.GetAllAsync()).Select(TenantViewModel.FromTenant));
 
-        public async Task<ActionResult> Details(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Details(string id) =>
+            View(TenantViewModel.FromTenant(await _repository.GetByNameAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         public ActionResult Create()
@@ -51,12 +56,8 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Edit(string id)
-        {
-            var tenant = await _repository.GetByNameAsync(id);
-
-            return View(tenant);
-        }
+        public async Task<ActionResult> Edit(string id) =>
+            View(TenantViewModel.FromTenant(await _repository.GetByNameAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
@@ -81,7 +82,8 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Delete(string id) => View(await _repository.GetByNameAsync(id));
+        public async Task<ActionResult> Delete(string id) =>
+            View(TenantViewModel.FromTenant(await _repository.GetByNameAsync(id)));
 
         [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]

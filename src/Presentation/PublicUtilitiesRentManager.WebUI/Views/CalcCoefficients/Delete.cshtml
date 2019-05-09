@@ -1,14 +1,14 @@
-﻿@model PublicUtilitiesRentManager.Domain.Entities.CalcCoefficient
+﻿@model CalcCoefficientViewModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление";
 }
 
-<h1>Delete</h1>
+<h1>Удаление</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы уверены, что желаете удалить этот коэффициент?</h3>
 <div>
-    <h4>CalcCoefficient</h4>
+    <h4>Коэффициент расчёта</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -26,7 +26,7 @@
     </dl>
     
     <form asp-action="DeleteConfirm" asp-route-id="@Model.Condition">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернуться к списку</a>
     </form>
 </div>

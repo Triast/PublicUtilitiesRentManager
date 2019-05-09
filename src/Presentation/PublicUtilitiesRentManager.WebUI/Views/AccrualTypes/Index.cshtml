@@ -1,14 +1,17 @@
-﻿@model IEnumerable<PublicUtilitiesRentManager.Domain.Entities.AccrualType>
+﻿@model IEnumerable<AccrualTypeViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Виды начислений";
 }
 
-<h1>Index</h1>
+<h1>Виды начислений</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Создать</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -19,17 +22,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Name }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Name }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Name })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Name }) <span>|</span>
+                    }
+                    @Html.ActionLink("Подробнее", "Details", new { id = item.Name })
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <span>|</span> @Html.ActionLink("Удалить", "Delete", new { id = item.Name })
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
