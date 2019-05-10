@@ -72,6 +72,7 @@ namespace PublicUtilitiesRentManager.WebUI
 
             services.AddTransient<ITenantRepository, TenantRepository>(_ => new TenantRepository(connectionString));
             services.AddTransient<IRoomRepository, RoomRepository>(_ => new RoomRepository(connectionString));
+            services.AddTransient<IRoomTypeRepository, RoomTypeRepository>(_ => new RoomTypeRepository(connectionString));
             services.AddTransient<IAccrualTypeRepository, AccrualTypeRepository>(_ => new AccrualTypeRepository(connectionString));
             services.AddTransient<ICalcCoefficientRepository, CalcCoefficientRepository>(_ => new CalcCoefficientRepository(connectionString));
 

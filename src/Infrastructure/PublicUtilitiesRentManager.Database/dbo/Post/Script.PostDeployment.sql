@@ -15,6 +15,7 @@ Post-Deployment Script Template
 :r .\Seeding\Identity\UserRolesSeed.sql
 
 :r .\Seeding\TenantsSeed.sql
+:r .\Seeding\RoomTypesSeed.sql
 :r .\Seeding\RoomsSeed.sql
 :r .\Seeding\AccrualTypesSeed.sql
 :r .\Seeding\CalcCoefficientsSeed.sql

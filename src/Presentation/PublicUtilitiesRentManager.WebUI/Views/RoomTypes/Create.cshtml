@@ -1,30 +1,25 @@
-﻿@model CalcCoefficientViewModel
+﻿@model RoomTypeViewModel
 
 @{
-    ViewData["Title"] = "Редактирование";
+    ViewData["Title"] = "Создание";
 }
 
-<h1>Редактирование</h1>
+<h1>Создание</h1>
 
-<h4>Коэффициент расчёта</h4>
+<h4>Вид помещения</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Coefficient" class="control-label"></label>
-                <input asp-for="Coefficient" class="form-control" />
-                <span asp-validation-for="Coefficient" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>

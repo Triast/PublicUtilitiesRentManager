@@ -59,21 +59,21 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             });
         }
 
-        public CalcCoefficient GetByCondition(string condition)
+        public CalcCoefficient GetByName(string name)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 return connection
-                    .QuerySingle<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Condition = @Condition;", new { Condition = condition });
+                    .QuerySingle<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Name = @Name;", new { Name = name });
             }
         }
 
-        public Task<CalcCoefficient> GetByConditionAsync(string condition)
+        public Task<CalcCoefficient> GetByNameAsync(string name)
         {
             var connection = new SqlConnection(_connectionString);
 
             return connection
-                .QuerySingleAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Condition = @Condition;", new { Condition = condition })
+                .QuerySingleAsync<CalcCoefficient>("SELECT * FROM CalcCoefficients WHERE Name = @Name;", new { Name = name })
                 .ContinueWith(calcCoefficients =>
             {
                 connection.Dispose();
@@ -86,14 +86,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Execute("INSERT INTO CalcCoefficients VALUES (@Id, @Condition, @Coefficient)", item);
+                connection.Execute("INSERT INTO CalcCoefficients VALUES (@Id, @Name, @Coefficient)", item);
             }
         }
         public Task AddAsync(CalcCoefficient item)
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("INSERT INTO CalcCoefficients VALUES (@Id, @Condition, @Coefficient)", item)
+            return connection.ExecuteAsync("INSERT INTO CalcCoefficients VALUES (@Id, @Name, @Coefficient)", item)
                 .ContinueWith(calcCoefficients =>
             {
                 connection.Dispose();
@@ -107,7 +107,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection
-                    .Execute("UPDATE CalcCoefficients SET Condition = @Condition, Coefficient = @Coefficient WHERE Id = @Id", item);
+                    .Execute("UPDATE CalcCoefficients SET Name = @Name, Coefficient = @Coefficient WHERE Id = @Id", item);
             }
         }
 
@@ -115,7 +115,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("UPDATE CalcCoefficients SET Condition = @Condition, Coefficient = @Coefficient WHERE Id = @Id", item).ContinueWith(calcCoefficients =>
+            return connection.ExecuteAsync("UPDATE CalcCoefficients SET Name = @Name, Coefficient = @Coefficient WHERE Id = @Id", item).ContinueWith(calcCoefficients =>
             {
                 connection.Dispose();
 
@@ -143,20 +143,20 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             });
         }
 
-        public void RemoveByCondition(string condition)
+        public void RemoveByName(string name)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection
-                    .Execute("DELETE FROM CalcCoefficients WHERE Condition = @Condition", new { Condition = condition });
+                    .Execute("DELETE FROM CalcCoefficients WHERE Name = @Name", new { Name = name });
             }
         }
-        public Task RemoveByConditionAsync(string condition)
+        public Task RemoveByNameAsync(string name)
         {
             var connection = new SqlConnection(_connectionString);
 
             return connection
-                .ExecuteAsync("DELETE FROM CalcCoefficients WHERE Condition = @Condition", new { Condition = condition })
+                .ExecuteAsync("DELETE FROM CalcCoefficients WHERE Name = @Name", new { Name = name })
                 .ContinueWith(calcCoefficients =>
             {
                 connection.Dispose();

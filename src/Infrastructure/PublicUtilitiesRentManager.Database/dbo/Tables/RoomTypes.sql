@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[RoomTypes]
+(
+	[Id] NVARCHAR(128) NOT NULL, 
+    [Name] NVARCHAR(50) NOT NULL,
+	CONSTRAINT [PK_RoomTypes] PRIMARY KEY CLUSTERED ([Id] ASC)
+)

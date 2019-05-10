@@ -1,10 +1,10 @@
-﻿@model IEnumerable<CalcCoefficientViewModel>
+﻿@model IEnumerable<RoomTypeViewModel>
 
 @{
-    ViewData["Title"] = "Коэффициенты расчётов";
+    ViewData["Title"] = "Виды помещений";
 }
 
-<h1>Коэффициенты расчётов</h1>
+<h1>Виды помещений</h1>
 
 @if (User.IsInRole("Administrator"))
 {
@@ -18,9 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Coefficient)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,9 +27,6 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Coefficient)
                 </td>
                 <td>
                     @if (User.IsInRole("Administrator"))

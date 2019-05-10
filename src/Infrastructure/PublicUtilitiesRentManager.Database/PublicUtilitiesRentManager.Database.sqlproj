@@ -78,6 +78,7 @@
     <Build Include="dbo\Tables\Identity\UserRoles.sql" />
     <Build Include="dbo\Tables\Identity\Users.sql" />
     <Build Include="dbo\Tables\Identity\UserTokens.sql" />
+    <Build Include="dbo\Tables\RoomTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post\Script.PostDeployment.sql" />
@@ -95,5 +96,9 @@
     <None Include="dbo\Post\Seeding\Identity\RolesSeed.sql" />
     <None Include="dbo\Post\Seeding\Identity\UsersSeed.sql" />
     <None Include="dbo\Post\Seeding\Identity\UserRolesSeed.sql" />
+    <None Include="dbo\Post\Seeding\RoomTypesSeed.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="PublicUtilitiesRentManager.Database.refactorlog" />
   </ItemGroup>
 </Project>

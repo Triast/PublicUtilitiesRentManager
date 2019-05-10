@@ -87,7 +87,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection
-                    .Execute("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item);
+                    .Execute("INSERT INTO Rooms VALUES (@Id, @RoomTypeId, @Address, @Square, @IsOccupied, @Price, @IncreasingCoefToBaseRate, @PlacementCoef, @ComfortCoef, @SocialOrientationCoef)", item);
             }
         }
         public Task AddAsync(Room item)
@@ -95,7 +95,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             var connection = new SqlConnection(_connectionString);
 
             return connection
-                .ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @Address, @RoomType, @Square, @Price, @IsOccupied)", item)
+                .ExecuteAsync("INSERT INTO Rooms VALUES (@Id, @RoomTypeId, @Address, @Square, @IsOccupied, @Price, @IncreasingCoefToBaseRate, @PlacementCoef, @ComfortCoef, @SocialOrientationCoef)", item)
                 .ContinueWith(rooms =>
             {
                 connection.Dispose();
@@ -109,7 +109,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection
-                    .Execute("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item);
+                    .Execute("UPDATE Rooms SET RoomTypeId = @RoomTypeId, Address = @Address, Square = @Square, IsOccupied = @IsOccupied, Price = @Price, IncreasingCoefToBaseRate = @IncreasingCoefToBaseRate, PlacementCoef = @PlacementCoef, ComfortCoef = @ComfortCoef, SocialOrientationCoef = @SocialOrientationCoef WHERE Id = @Id", item);
             }
         }
 
@@ -118,7 +118,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
             var connection = new SqlConnection(_connectionString);
 
             return connection
-                .ExecuteAsync("UPDATE Rooms SET Address = @Address, RoomType = @RoomType, Square = @Square, Price = @Price, IsOccupied = @IsOccupied WHERE Id = @Id", item)
+                .ExecuteAsync("UPDATE Rooms SET RoomTypeId = @RoomTypeId, Address = @Address, Square = @Square, IsOccupied = @IsOccupied, Price = @Price, IncreasingCoefToBaseRate = @IncreasingCoefToBaseRate, PlacementCoef = @PlacementCoef, ComfortCoef = @ComfortCoef, SocialOrientationCoef = @SocialOrientationCoef WHERE Id = @Id", item)
                 .ContinueWith(rooms =>
             {
                 connection.Dispose();

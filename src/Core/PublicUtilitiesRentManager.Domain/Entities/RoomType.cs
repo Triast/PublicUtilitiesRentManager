@@ -1,9 +1,8 @@
 ﻿namespace PublicUtilitiesRentManager.Domain.Entities
 {
-    public class CalcCoefficient
+    public class RoomType
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public double Coefficient { get; set; }
     }
 }

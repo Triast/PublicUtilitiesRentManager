@@ -8,24 +8,37 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         public string Id { get; set; }
         [Display(Name = "Адрес")]
         public string Address { get; set; }
+        public string RoomTypeId { get; set; }
         [Display(Name = "Тип помещения")]
         public string RoomType { get; set; }
         [Display(Name = "Площадь")]
         public double Square { get; set; }
-        [Display(Name = "Цена (за кв. м)")]
-        public decimal Price { get; set; }
         [Display(Name = "Занято")]
         public bool IsOccupied { get; set; }
+        [Display(Name = "Ставка за 1 кв. м")]
+        public decimal Price { get; set; }
+        [Display(Name = "Повышаюший коэффициент к базовой ставке")]
+        public decimal IncreasingCoefToBaseRate { get; set; }
+        [Display(Name = "Коэффициент местоположения")]
+        public decimal PlacementCoef { get; set; }
+        [Display(Name = "Коэффициент удобства")]
+        public decimal ComfortCoef { get; set; }
+        [Display(Name = "Коэффициент соц. направленности")]
+        public decimal SocialOrientationCoef { get; set; }
 
         public static RoomViewModel FromRoom(Room room) =>
             new RoomViewModel
             {
                 Id = room.Id,
+                RoomTypeId = room.RoomTypeId,
                 Address = room.Address,
-                RoomType = room.RoomType,
                 Square = room.Square,
+                IsOccupied = room.IsOccupied,
                 Price = room.Price,
-                IsOccupied = room.IsOccupied
+                IncreasingCoefToBaseRate = room.IncreasingCoefToBaseRate,
+                PlacementCoef = room.PlacementCoef,
+                ComfortCoef = room.ComfortCoef,
+                SocialOrientationCoef = room.SocialOrientationCoef
             };
     }
 }

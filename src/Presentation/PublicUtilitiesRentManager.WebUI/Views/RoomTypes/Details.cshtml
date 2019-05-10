@@ -1,4 +1,4 @@
-﻿@model CalcCoefficientViewModel
+﻿@model RoomTypeViewModel
 
 @{
     ViewData["Title"] = "Подробнее";
@@ -7,7 +7,7 @@
 <h1>Подробнее</h1>
 
 <div>
-    <h4>Коэффициент расчёта</h4>
+    <h4>Вид помещения</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -15,12 +15,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Coefficient)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Coefficient)
         </dd>
     </dl>
 </div>

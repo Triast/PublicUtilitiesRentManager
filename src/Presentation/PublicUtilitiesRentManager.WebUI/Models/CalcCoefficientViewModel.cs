@@ -6,8 +6,8 @@ namespace PublicUtilitiesRentManager.WebUI.Models
     public class CalcCoefficientViewModel
     {
         public string Id { get; set; }
-        [Display(Name = "Условие")]
-        public string Condition { get; set; }
+        [Display(Name = "Наименование")]
+        public string Name { get; set; }
         [Display(Name = "Коэффициент")]
         public double Coefficient { get; set; }
 
@@ -15,7 +15,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             new CalcCoefficientViewModel
             {
                 Id = calcCoefficient.Id,
-                Condition = calcCoefficient.Condition,
+                Name = calcCoefficient.Name,
                 Coefficient = calcCoefficient.Coefficient
             };
     }
