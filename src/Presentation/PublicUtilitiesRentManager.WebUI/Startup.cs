@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.Infrastructure.Repositories;
 using System;
@@ -75,6 +76,9 @@ namespace PublicUtilitiesRentManager.WebUI
             services.AddTransient<IRoomTypeRepository, RoomTypeRepository>(_ => new RoomTypeRepository(connectionString));
             services.AddTransient<IAccrualTypeRepository, AccrualTypeRepository>(_ => new AccrualTypeRepository(connectionString));
             services.AddTransient<ICalcCoefficientRepository, CalcCoefficientRepository>(_ => new CalcCoefficientRepository(connectionString));
+            services.AddTransient<IRepository<Contract>, ContractRepository>(_ => new ContractRepository(connectionString));
+            services.AddTransient<IRepository<Accrual>, AccrualRepository>(_ => new AccrualRepository(connectionString));
+            services.AddTransient<IRepository<Payment>, PaymentRepository>(_ => new PaymentRepository(connectionString));
 
             services.AddMvc()
                 .AddNewtonsoftJson();

@@ -41,10 +41,15 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<Accrual>> GetAllAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return connection.QueryAsync<Accrual>("SELECT * FROM Accruals;");
-            }
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<Accrual>("SELECT * FROM Accruals;")
+                .ContinueWith(accruals =>
+                {
+                    connection.Dispose();
+
+                    return accruals.Result;
+                });
         }
 
         public void Add(Accrual item)

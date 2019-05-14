@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PublicUtilitiesRentManager.Domain.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
 using System.Collections.Generic;
@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: Finish Create and Edit post methods.
     [Authorize(Roles = "Administrator,Manager")]
     public class RoomsController : Controller
     {
@@ -49,26 +48,32 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            var roomTypes = await _roomTypeRepository.GetAllAsync();
+            var emptyRoomViewModel = new RoomViewModel
+            {
+                RoomTypes = new SelectList(roomTypes, "Id", "Name", roomTypes.First())
+            };
+
+            return View(emptyRoomViewModel);
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Room room)
+        public async Task<ActionResult> Create(RoomViewModel room)
         {
             room.Id = System.Guid.NewGuid().ToString();
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(room);
             }
 
             try
             {
-                await _repository.AddAsync(room);
+                await _repository.AddAsync(RoomViewModel.FromRoomViewModel(room));
 
                 return RedirectToAction(nameof(Index));
             }
@@ -82,8 +87,10 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             var room = RoomViewModel.FromRoom(await _repository.GetByAddressAsync(id));
+            var roomTypes = await _roomTypeRepository.GetAllAsync();
 
             room.RoomType = (await _roomTypeRepository.GetByIdAsync(room.RoomTypeId)).Name;
+            room.RoomTypes = new SelectList(roomTypes, "Id", "Name", roomTypes.First(t => t.Id == room.RoomTypeId));
 
             return View(room);
         }
@@ -91,7 +98,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Room room)
+        public async Task<ActionResult> Edit(RoomViewModel room)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +107,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
 
             try
             {
-                await _repository.UpdateAsync(room);
+                await _repository.UpdateAsync(RoomViewModel.FromRoomViewModel(room));
 
                 return RedirectToAction(nameof(Index));
             }

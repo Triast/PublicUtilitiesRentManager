@@ -20,23 +20,42 @@
             </div>
             <div class="form-group">
                 <label asp-for="RoomType" class="control-label"></label>
-                <input asp-for="RoomType" class="form-control" />
-                <span asp-validation-for="RoomType" class="text-danger"></span>
+                <select asp-for="RoomTypeId" asp-items="Model.RoomTypes" class="form-control"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Square" class="control-label"></label>
                 <input asp-for="Square" class="form-control" />
                 <span asp-validation-for="Square" class="text-danger"></span>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOccupied" /> @Html.DisplayNameFor(model => model.IsOccupied)
+                </label>
+            </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOccupied" /> @Html.DisplayNameFor(model => model.IsOccupied)
-                </label>
+            <div class="form-group">
+                <label asp-for="IncreasingCoefToBaseRate" class="control-label"></label>
+                <input asp-for="IncreasingCoefToBaseRate" class="form-control" />
+                <span asp-validation-for="IncreasingCoefToBaseRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacementCoef" class="control-label"></label>
+                <input asp-for="PlacementCoef" class="form-control" />
+                <span asp-validation-for="PlacementCoef" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ComfortCoef" class="control-label"></label>
+                <input asp-for="ComfortCoef" class="form-control" />
+                <span asp-validation-for="ComfortCoef" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SocialOrientationCoef" class="control-label"></label>
+                <input asp-for="SocialOrientationCoef" class="form-control" />
+                <span asp-validation-for="SocialOrientationCoef" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

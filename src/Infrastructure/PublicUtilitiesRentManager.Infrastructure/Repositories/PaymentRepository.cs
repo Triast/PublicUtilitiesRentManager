@@ -41,10 +41,15 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<Payment>> GetAllAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return connection.QueryAsync<Payment>("SELECT * FROM Payments;");
-            }
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<Payment>("SELECT * FROM Payments;")
+                .ContinueWith(payments =>
+                {
+                    connection.Dispose();
+
+                    return payments.Result;
+                });
         }
 
         public void Add(Payment item)

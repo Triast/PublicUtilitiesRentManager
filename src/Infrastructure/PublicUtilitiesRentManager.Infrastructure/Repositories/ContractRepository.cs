@@ -25,10 +25,15 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task<Contract> GetByIdAsync(string id)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return connection.QuerySingleAsync<Contract>("SELECT * FROM Contracts WHERE Id = @Id;", new { Id = id });
-            }
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QuerySingleAsync<Contract>("SELECT * FROM Contracts WHERE Id = @Id;", new { Id = id })
+                .ContinueWith(contracts =>
+                {
+                    connection.Dispose();
+
+                    return contracts.Result;
+                });
         }
 
         public IEnumerable<Contract> GetAll()
@@ -41,10 +46,15 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
 
         public Task<IEnumerable<Contract>> GetAllAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return connection.QueryAsync<Contract>("SELECT * FROM Contracts;");
-            }
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.QueryAsync<Contract>("SELECT * FROM Contracts;")
+                .ContinueWith(contracts =>
+                {
+                    connection.Dispose();
+
+                    return contracts.Result;
+                });
         }
 
         public void Add(Contract item)

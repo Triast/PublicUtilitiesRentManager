@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <input id="searchQuery" class="col-md-4 form-control" type="text" />
+    <form id="contractForm" method="get">
+        <input type="submit" value="Договора" class="btn btn-primary ml-2" onclick="copyQueryToContracts()" />
+    </form>
+    <form id="accrualForm" method="get">
+        <input type="submit" value="Начисления" class="btn btn-primary ml-2" onclick="copyQueryToAccruals()" />
+    </form>
+    <form id="paymentForm" method="get">
+        <input type="submit" value="Оплаты" class="btn btn-primary ml-2" onclick="copyQueryToPayments()" />
+    </form>
+
+    <script>
+        function copyQueryToContracts() {
+            const searchQuery = document.getElementById("searchQuery");
+            const form = document.getElementById("contractForm");
+
+            form.action = "/Contracts/Index/" + searchQuery.value;
+        }
+
+        function copyQueryToAccruals() {
+            const searchQuery = document.getElementById("searchQuery");
+            const form = document.getElementById("accrualForm");
+
+            form.action = "/Accruals/Index/" + searchQuery.value;
+        }
+
+        function copyQueryToPayments() {
+            const searchQuery = document.getElementById("searchQuery");
+            const form = document.getElementById("paymentForm");
+
+            form.action = "/Payments/Index/" + searchQuery.value;
+        }
+    </script>
+</div>
+
+@RenderBody()

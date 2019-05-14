@@ -1,4 +1,5 @@
-﻿using PublicUtilitiesRentManager.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PublicUtilitiesRentManager.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PublicUtilitiesRentManager.WebUI.Models
@@ -26,6 +27,8 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         [Display(Name = "Коэффициент соц. направленности")]
         public decimal SocialOrientationCoef { get; set; }
 
+        public SelectList RoomTypes { get; set; }
+
         public static RoomViewModel FromRoom(Room room) =>
             new RoomViewModel
             {
@@ -39,6 +42,21 @@ namespace PublicUtilitiesRentManager.WebUI.Models
                 PlacementCoef = room.PlacementCoef,
                 ComfortCoef = room.ComfortCoef,
                 SocialOrientationCoef = room.SocialOrientationCoef
+            };
+
+        public static Room FromRoomViewModel(RoomViewModel viewModel) =>
+            new Room
+            {
+                Id = viewModel.Id,
+                RoomTypeId = viewModel.RoomTypeId,
+                Address = viewModel.Address,
+                Square = viewModel.Square,
+                IsOccupied = viewModel.IsOccupied,
+                Price = viewModel.Price,
+                IncreasingCoefToBaseRate = viewModel.IncreasingCoefToBaseRate,
+                PlacementCoef = viewModel.PlacementCoef,
+                ComfortCoef = viewModel.ComfortCoef,
+                SocialOrientationCoef = viewModel.SocialOrientationCoef
             };
     }
 }
