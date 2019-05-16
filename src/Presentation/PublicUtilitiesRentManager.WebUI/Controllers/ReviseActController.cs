@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    // Todo: Add authentication rules for controllers. Add posibilities to show revise act
+    // for specific tenant, accrual type and period.
     public class ReviseActController : Controller
     {
         private readonly ITenantRepository _tenantRepository;

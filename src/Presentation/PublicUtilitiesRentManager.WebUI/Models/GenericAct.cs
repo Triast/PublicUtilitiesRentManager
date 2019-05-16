@@ -13,6 +13,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         public string Room { get; set; }
         [Display(Name = "Услуга")]
         public string AccrualType { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Дата начисления")]
         public DateTime Date { get; set; }
         [Display(Name = "Сумма")]
