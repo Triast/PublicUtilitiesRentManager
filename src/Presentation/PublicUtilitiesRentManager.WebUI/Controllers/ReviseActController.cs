@@ -2,6 +2,7 @@
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             _paymentRepository = paymentRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string tenant, string accrualType, DateTime? from, DateTime? to)
         {
             var accruals = (await GetAccrualViewModels()).Select(GenericAct.FromAccrualViewModel);
             var payments = (await GetPaymentViewModels()).Select(GenericAct.FromPaymentViewModel);
@@ -41,7 +42,23 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             acts.AddRange(accruals);
             acts.AddRange(payments);
 
-            return View(acts.OrderBy(a => a.Date));
+            var actsFiltered = acts.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(tenant))
+            {
+                actsFiltered = actsFiltered.Where(a => a.Tenant.StartsWith(tenant));
+            }
+            if (!string.IsNullOrWhiteSpace(accrualType))
+            {
+                actsFiltered = actsFiltered.Where(a => a.AccrualType.StartsWith(accrualType));
+            }
+
+            var fromDate = from?.Date ?? new DateTime();
+            var toDate = to?.Date ?? DateTime.Now.Date;
+
+            actsFiltered = actsFiltered.Where(a => a.Date >= fromDate && a.Date <= toDate);
+
+            return View(actsFiltered.OrderBy(a => a.Date));
         }
 
         private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels()

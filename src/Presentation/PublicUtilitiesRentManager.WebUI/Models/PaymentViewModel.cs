@@ -15,6 +15,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         [Display(Name = "Услуга")]
         public string AccrualType { get; set; }
         [Display(Name = "Дата оплаты")]
+        [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
         [Display(Name = "Сумма")]
         public decimal Summ { get; set; }
@@ -26,6 +27,15 @@ namespace PublicUtilitiesRentManager.WebUI.Models
                 ContractId = payment.ContractId,
                 PaymentDate = payment.PaymentDate,
                 Summ = payment.Summ
+            };
+
+        public static Payment FromPaymentViewModel(PaymentViewModel paymentVM) =>
+            new Payment
+            {
+                Id = paymentVM.Id,
+                ContractId = paymentVM.ContractId,
+                PaymentDate = paymentVM.PaymentDate,
+                Summ = paymentVM.Summ
             };
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.Identity.Dapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
@@ -9,6 +12,7 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    [Authorize]
     public class ContractsController : Controller
     {
         private readonly ITenantRepository _tenantRepository;
@@ -16,21 +20,27 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         private readonly IAccrualTypeRepository _accrualTypeRepository;
         private readonly IRepository<Contract> _contractRepository;
 
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public ContractsController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
-            IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository
+            IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository,
+            UserManager<ApplicationUser> userManager
             )
         {
             _tenantRepository = tenantRepository;
             _roomRepository = roomRepository;
             _accrualTypeRepository = accrualTypeRepository;
             _contractRepository = contractRepository;
+            _userManager = userManager;
         }
 
         // id parameter is used as tenant search.
         public async Task<IActionResult> Index(string id)
         {
-            var contracts = await GetContractViewModels();
+            string userId = User.IsInRole("User") ? _userManager.GetUserId(User) : null;
+
+            var contracts = await GetContractViewModels(userId);
 
             if (!String.IsNullOrWhiteSpace(id))
             {
@@ -41,11 +51,14 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             return View(contracts);
         }
 
-        private async Task<IEnumerable<ContractViewModel>> GetContractViewModels()
+        private async Task<IEnumerable<ContractViewModel>> GetContractViewModels(string userId)
         {
+            var tenants = await _tenantRepository.GetAllAsync();
             var contracts = (await _contractRepository.GetAllAsync())
+                .Where(c => userId != null ? tenants.First(t => t.Id == c.TenantId).UserId == userId : true)
                 .Select(ContractViewModel.FromContract)
                 .ToList();
+
             var getTasks = new List<Task>();
 
             foreach (var contract in contracts)

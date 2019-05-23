@@ -1,8 +1,11 @@
 ﻿CREATE TABLE [dbo].[Tenants]
 (
 	[Id] NVARCHAR(128) NOT NULL,
+	[UserId] NVARCHAR(450) NULL,
 	[Name] NVARCHAR(50) NOT NULL,
 	[Address] NVARCHAR(MAX) NOT NULL, 
     [PhoneNumber] NVARCHAR(50) NULL, 
-    CONSTRAINT [PK_Tenants] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_Tenants] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_Tenants_Users] FOREIGN KEY ([UserId])
+		REFERENCES [dbo].[Users] ([Id])
 )

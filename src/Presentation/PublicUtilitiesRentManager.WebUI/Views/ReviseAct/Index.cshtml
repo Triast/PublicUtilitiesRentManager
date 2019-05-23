@@ -10,6 +10,32 @@
 
 <h1>Акт сверки</h1>
 
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" method="get">
+            <div class="form-group">
+                <label class="control-label">Арендатор:</label>
+                <input type="text" class="form-control" name="tenant" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Услуга:</label>
+                <input type="text" class="form-control" name="accrualType" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">С:</label>
+                <input type="date" class="form-control" name="from" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">По:</label>
+                <input type="date" class="form-control" name="to" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Применить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row justify-content-between">
     <p class="col-md-2">Входящее сальдо: @(subtraction < 0m ? (-subtraction).ToString("F2") : "")</p>
     <p class="col-md-2">Исходящее сальдо: @(subtraction > 0m ? subtraction.ToString("F2") : "")</p>

@@ -6,6 +6,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
     public class TenantViewModel
     {
         public string Id { get; set; }
+        public string UserId { get; set; }
         [Display(Name = "Наименование")]
         public string Name { get; set; }
         [Display(Name = "Адрес")]
@@ -17,6 +18,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             new TenantViewModel
             {
                 Id = tenant.Id,
+                UserId = tenant.UserId,
                 Name = tenant.Name,
                 Address = tenant.Address,
                 PhoneNumber = tenant.PhoneNumber

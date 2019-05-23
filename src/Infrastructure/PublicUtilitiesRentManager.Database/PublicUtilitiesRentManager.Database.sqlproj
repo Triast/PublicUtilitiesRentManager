@@ -98,7 +98,4 @@
     <None Include="dbo\Post\Seeding\Identity\UserRolesSeed.sql" />
     <None Include="dbo\Post\Seeding\RoomTypesSeed.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="PublicUtilitiesRentManager.Database.refactorlog" />
-  </ItemGroup>
 </Project>

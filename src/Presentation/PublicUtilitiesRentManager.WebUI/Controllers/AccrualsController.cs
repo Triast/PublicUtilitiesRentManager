@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
@@ -9,6 +10,8 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    // Todo: add filter for entities if logged user has user role.
+    [Authorize]
     public class AccrualsController : Controller
     {
         private readonly ITenantRepository _tenantRepository;
@@ -31,6 +34,11 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
 
         public async Task<IActionResult> Index(string id)
         {
+            if (User.IsInRole("User") && User.Identity.Name != id)
+            {
+                return View("Account/AccessDenied");
+            }
+
             var accruals = await GetAccrualViewModels();
 
             if (!String.IsNullOrWhiteSpace(id))
@@ -40,6 +48,49 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             }
 
             return View(accruals);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Create(string contractId)
+        {
+            var contract = await _contractRepository.GetByIdAsync(contractId);
+            var accrual = new AccrualViewModel
+            {
+                ContractId = contractId,
+                Tenant = (await _tenantRepository.GetByIdAsync(contract.TenantId)).Name,
+                Room = (await _roomRepository.GetByIdAsync(contract.RoomId)).Address,
+                AccrualType = (await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId)).Name,
+                AccrualDate = DateTime.Now.Date
+            };
+
+            return View(accrual);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(AccrualViewModel accrualVM)
+        {
+            accrualVM.Id = System.Guid.NewGuid().ToString();
+            var accrual = AccrualViewModel.FromAccrualViewModel(accrualVM);
+
+            if (!ModelState.IsValid)
+            {
+                return View(accrualVM);
+            }
+
+            try
+            {
+                await _accrualRepository.AddAsync(accrual);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+
+                return View(accrualVM);
+            }
         }
 
         private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels()

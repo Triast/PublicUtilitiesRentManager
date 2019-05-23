@@ -61,10 +61,15 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         }
         public Task AddAsync(Payment item)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return connection.ExecuteAsync("INSERT INTO Payments VALUES (@Id, @ContractId, @PaymentDate, @Summ)", item);
-            }
+            var connection = new SqlConnection(_connectionString);
+
+            return connection.ExecuteAsync("INSERT INTO Payments VALUES (@Id, @ContractId, @PaymentDate, @Summ)", item)
+                .ContinueWith(accruals =>
+                {
+                    connection.Dispose();
+
+                    return accruals.Result;
+                });
         }
 
         public void Update(Payment item)

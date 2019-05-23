@@ -79,14 +79,14 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Execute("INSERT INTO Tenants VALUES (@Id, @Name, @Address, @PhoneNumber)", item);
+                connection.Execute("INSERT INTO Tenants VALUES (@Id, @UserId, @Name, @Address, @PhoneNumber)", item);
             }
         }
         public Task AddAsync(Tenant item)
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("INSERT INTO Tenants VALUES (@Id, @Name, @Address, @PhoneNumber)", item).ContinueWith(tenants =>
+            return connection.ExecuteAsync("INSERT INTO Tenants VALUES (@Id, @UserId, @Name, @Address, @PhoneNumber)", item).ContinueWith(tenants =>
             {
                 connection.Dispose();
 
@@ -98,7 +98,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Execute("UPDATE Tenants SET Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item);
+                connection.Execute("UPDATE Tenants SET UserId = @UserId, Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item);
             }
         }
 
@@ -106,7 +106,7 @@ namespace PublicUtilitiesRentManager.Infrastructure.Repositories
         {
             var connection = new SqlConnection(_connectionString);
 
-            return connection.ExecuteAsync("UPDATE Tenants SET Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item).ContinueWith(tenants =>
+            return connection.ExecuteAsync("UPDATE Tenants SET UserId = @UserId, Name = @Name, Address = @Address, PhoneNumber = @PhoneNumber WHERE Id = @Id", item).ContinueWith(tenants =>
             {
                 connection.Dispose();
 
