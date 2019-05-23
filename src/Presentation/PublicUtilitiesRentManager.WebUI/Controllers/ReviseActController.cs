@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCore.Identity.Dapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
@@ -20,10 +22,13 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         private readonly IRepository<Accrual> _accrualRepository;
         private readonly IRepository<Payment> _paymentRepository;
 
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public ReviseActController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
             IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository,
-            IRepository<Accrual> accrualRepository, IRepository<Payment> paymentRepository)
+            IRepository<Accrual> accrualRepository, IRepository<Payment> paymentRepository,
+            UserManager<ApplicationUser> userManager)
         {
             _tenantRepository = tenantRepository;
             _roomRepository = roomRepository;
@@ -31,12 +36,15 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             _contractRepository = contractRepository;
             _accrualRepository = accrualRepository;
             _paymentRepository = paymentRepository;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(string tenant, string accrualType, DateTime? from, DateTime? to)
         {
-            var accruals = (await GetAccrualViewModels()).Select(GenericAct.FromAccrualViewModel);
-            var payments = (await GetPaymentViewModels()).Select(GenericAct.FromPaymentViewModel);
+            string userId = User.IsInRole("User") ? _userManager.GetUserId(User) : null;
+
+            var accruals = (await GetAccrualViewModels(userId)).Select(GenericAct.FromAccrualViewModel);
+            var payments = (await GetPaymentViewModels(userId)).Select(GenericAct.FromPaymentViewModel);
             var acts = new List<GenericAct>();
 
             acts.AddRange(accruals);
@@ -61,16 +69,19 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             return View(actsFiltered.OrderBy(a => a.Date));
         }
 
-        private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels()
+        private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels(string userId)
         {
+            var tenants = await _tenantRepository.GetAllAsync();
+            var contracts = await _contractRepository.GetAllAsync();
             var accruals = (await _accrualRepository.GetAllAsync())
+                .Where(a => userId != null ? tenants.First(t => t.Id == contracts.First(c => c.Id == a.ContractId).TenantId).UserId == userId : true)
                 .Select(AccrualViewModel.FromAccrual)
                 .ToList();
             var getTasks = new List<Task>();
 
             foreach (var accrual in accruals)
             {
-                var contract = await _contractRepository.GetByIdAsync(accrual.ContractId);
+                var contract = contracts.First(c => c.Id == accrual.ContractId);
 
                 getTasks.Add(_tenantRepository
                     .GetByIdAsync(contract.TenantId)
@@ -88,16 +99,19 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             return accruals;
         }
 
-        private async Task<IEnumerable<PaymentViewModel>> GetPaymentViewModels()
+        private async Task<IEnumerable<PaymentViewModel>> GetPaymentViewModels(string userId)
         {
+            var tenants = await _tenantRepository.GetAllAsync();
+            var contracts = await _contractRepository.GetAllAsync();
             var payments = (await _paymentRepository.GetAllAsync())
+                .Where(a => userId != null ? tenants.First(t => t.Id == contracts.First(c => c.Id == a.ContractId).TenantId).UserId == userId : true)
                 .Select(PaymentViewModel.FromPayment)
                 .ToList();
             var getTasks = new List<Task>();
 
             foreach (var payment in payments)
             {
-                var contract = await _contractRepository.GetByIdAsync(payment.ContractId);
+                var contract = contracts.First(c => c.Id == payment.ContractId);
 
                 getTasks.Add(_tenantRepository
                     .GetByIdAsync(contract.TenantId)

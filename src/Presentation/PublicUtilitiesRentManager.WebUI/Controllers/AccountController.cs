@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Identity.Dapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,6 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
@@ -44,11 +44,11 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, await _signInManager.CreateUserPrincipalAsync(user));
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -59,7 +59,6 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -97,13 +96,13 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                     //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, await _signInManager.CreateUserPrincipalAsync(createdUser));
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -112,6 +111,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             _logger.LogInformation("User logged out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }

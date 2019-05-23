@@ -4,16 +4,24 @@
     ViewData["Title"] = "Подробнее";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item"><a asp-controller="RoomTypes" asp-action="Index">Виды помещений</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Подробнее</li>
+    </ol>
+</nav>
+
 <h1>Подробнее</h1>
 
 <div>
     <h4>Вид помещения</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>

@@ -4,6 +4,14 @@
     ViewData["Title"] = "Удаление";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item"><a asp-controller="AccrualTypes" asp-action="Index">Виды начислений</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Удаление</li>
+    </ol>
+</nav>
+
 <h1>Удаление</h1>
 
 <h3>Вы уверены, что желаете удалить этот вид начисления?</h3>
@@ -11,14 +19,14 @@
     <h4>Вид начисления</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
-    
+
     <form asp-action="DeleteConfirm" asp-route-id="@Model.Name">
         <input type="submit" value="Удалить" class="btn btn-danger" /> |
         <a asp-action="Index">Вернуться к списку</a>

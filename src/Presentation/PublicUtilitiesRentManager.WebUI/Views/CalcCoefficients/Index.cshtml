@@ -4,6 +4,13 @@
     ViewData["Title"] = "Коэффициенты расчётов";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Коэффициенты расчётов</li>
+    </ol>
+</nav>
+
 <h1>Коэффициенты расчётов</h1>
 
 @if (User.IsInRole("Administrator"))

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.Identity.Dapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Infrastructure.Interfaces;
@@ -10,7 +12,7 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: add filter for entities if logged user has user role.
+    //Todo: add breadcrumbs for views.
     [Authorize]
     public class AccrualsController : Controller
     {
@@ -20,26 +22,26 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         private readonly IRepository<Contract> _contractRepository;
         private readonly IRepository<Accrual> _accrualRepository;
 
+        private readonly UserManager<ApplicationUser> _userManager;
+
         public AccrualsController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
             IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository,
-            IRepository<Accrual> accrualRepository)
+            IRepository<Accrual> accrualRepository, UserManager<ApplicationUser> userManager)
         {
             _tenantRepository = tenantRepository;
             _roomRepository = roomRepository;
             _accrualTypeRepository = accrualTypeRepository;
             _contractRepository = contractRepository;
             _accrualRepository = accrualRepository;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(string id)
         {
-            if (User.IsInRole("User") && User.Identity.Name != id)
-            {
-                return View("Account/AccessDenied");
-            }
+            string userId = User.IsInRole("User") ? _userManager.GetUserId(User) : null;
 
-            var accruals = await GetAccrualViewModels();
+            var accruals = await GetAccrualViewModels(userId);
 
             if (!String.IsNullOrWhiteSpace(id))
             {
@@ -93,9 +95,12 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             }
         }
 
-        private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels()
+        private async Task<IEnumerable<AccrualViewModel>> GetAccrualViewModels(string userId)
         {
+            var tenants = await _tenantRepository.GetAllAsync();
+            var contracts = await _contractRepository.GetAllAsync();
             var accruals = (await _accrualRepository.GetAllAsync())
+                .Where(a => userId != null ? tenants.First(t => t.Id == contracts.First(c => c.Id == a.ContractId).TenantId).UserId == userId : true)
                 .Select(AccrualViewModel.FromAccrual)
                 .ToList();
             var getTasks = new List<Task>();

@@ -12,40 +12,146 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="row">
-        <h2 class="h2 col-12">Оплаты и начисления по договорам</h2>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Договора</h5>
-                    @if (User.IsInRole("User"))
-                    {
-                        <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
-                    }
-                    else
-                    {
-                        <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
-                    }
-                    <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
+    <div class="card my-5">
+        <h5 class="card-header">Оплаты и начисления по договорам</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Договора</h5>
+                            @if (User.IsInRole("User"))
+                            {
+                                <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
+                            }
+                            <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Начисления</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Оплаты</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a asp-controller="Payments" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Начисления</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+    </div>
+
+    <div class="card my-5">
+        <h5 class="card-header">Акт сверки</h5>
+        <div class="card-body">
+            <div class="row">
+                @*<div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Договора</h5>
+                                @if (User.IsInRole("User"))
+                                {
+                                    <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
+                                }
+                                <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Начисления</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">За период</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <form asp-controller="ReviseAct" asp-action="Index" method="get">
+                                <label for="from">C:</label>
+                                <input type="date" name="from" class="form-control" />
+
+                                <label for="to">по:</label>
+                                <input type="date" name="to" class="form-control" />
+                                <br />
+
+                                <input type="submit" value="Перейти" class="btn btn-primary" />
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Оплаты</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a asp-controller="Payments" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+    </div>
+
+    <div class="card my-5">
+        <h5 class="card-header">Заключение договоров</h5>
+        <div class="card-body">
+            <div class="row">
+                @*<div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Договора</h5>
+                            @if (User.IsInRole("User"))
+                            {
+                                <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
+                            }
+                            <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Помещения</h5>
+                            <p class="card-text">Просмотр свободных помещений, на которые возможно составление договора аренды.</p>
+                            <a asp-controller="Rooms" asp-action="Free" class="btn btn-primary">Перейти</a>
+                        </div>
+                    </div>
                 </div>
+                @*<div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">За период</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <form asp-controller="ReviseAct" asp-action="Index" method="get">
+                                <label for="from">C:</label>
+                                <input type="date" name="from" class="form-control" />
+
+                                <label for="to">по:</label>
+                                <input type="date" name="to" class="form-control" />
+                                <br />
+
+                                <input type="submit" value="Перейти" class="btn btn-primary" />
+                            </form>
+                        </div>
+                    </div>
+                </div>*@
             </div>
         </div>
     </div>

@@ -142,5 +142,25 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 return View();
             }
         }
+
+        [Authorize]
+        public async Task<ActionResult> Free()
+        {
+            var rooms = (await _repository.GetAllAsync())
+                .Where(r => !r.IsOccupied)
+                .Select(RoomViewModel.FromRoom).ToList();
+            var getRoomTypeTasks = new List<Task>();
+
+            foreach (var room in rooms)
+            {
+                getRoomTypeTasks.Add(_roomTypeRepository
+                    .GetByIdAsync(room.RoomTypeId)
+                    .ContinueWith(roomType => { room.RoomType = roomType.Result.Name; }));
+            }
+
+            await Task.WhenAll(getRoomTypeTasks);
+
+            return View(rooms);
+        }
     }
 }

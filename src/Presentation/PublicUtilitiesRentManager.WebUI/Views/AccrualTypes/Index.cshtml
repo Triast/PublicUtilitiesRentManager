@@ -4,6 +4,13 @@
     ViewData["Title"] = "Виды начислений";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Виды начислений</li>
+    </ol>
+</nav>
+
 <h1>Виды начислений</h1>
 
 @if (User.IsInRole("Administrator"))

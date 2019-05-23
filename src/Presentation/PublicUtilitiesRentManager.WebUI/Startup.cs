@@ -1,4 +1,6 @@
 using AspNetCore.Identity.Dapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +40,16 @@ namespace PublicUtilitiesRentManager.WebUI
                 .AddSignInManager<SignInManager<ApplicationUser>>()
                 .AddDapperStores(connectionString)
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -100,6 +112,7 @@ namespace PublicUtilitiesRentManager.WebUI
             app.UseStaticFiles();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRouting(routes =>
             {
@@ -110,8 +123,6 @@ namespace PublicUtilitiesRentManager.WebUI
             });
 
             app.UseCookiePolicy();
-
-            app.UseAuthorization();
         }
     }
 }
