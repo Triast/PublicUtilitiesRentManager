@@ -1,0 +1,44 @@
+﻿@model CalculationMonitorViewModel
+
+@{
+    ViewData["Title"] = "Аренда";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Аренда за период (@Model.Start.ToShortDateString() - @Model.End.ToShortDateString())</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OpeningBalance)
+            </th>
+            <th>
+                Начислено
+            </th>
+            <th>
+                Оплачено
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosingBalance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.OpeningBalance)
+            </td>
+            <td>
+                @Model.Accruals.Sum(a => a.Summ)
+            </td>
+            <td>
+                @Model.Payments.Sum(p => p.Summ)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ClosingBalance)
+            </td>
+        </tr>
+    </tbody>
+</table>

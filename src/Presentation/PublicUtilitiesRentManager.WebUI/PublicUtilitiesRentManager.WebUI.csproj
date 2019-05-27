@@ -217,7 +217,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\PublicUtilitiesRentManager.Domain\PublicUtilitiesRentManager.Domain.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\PublicUtilitiesRentManager.Infrastructure\PublicUtilitiesRentManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\PublicUtilitiesRentManager.Persistance\PublicUtilitiesRentManager.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

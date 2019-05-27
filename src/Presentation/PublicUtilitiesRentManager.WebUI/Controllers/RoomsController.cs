@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PublicUtilitiesRentManager.Infrastructure.Interfaces;
+using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
 using System.Collections.Generic;
 using System.Linq;

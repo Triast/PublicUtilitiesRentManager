@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
-using PublicUtilitiesRentManager.Infrastructure.Interfaces;
+using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         private readonly ITenantRepository _tenantRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IAccrualTypeRepository _accrualTypeRepository;
-        private readonly IRepository<Contract> _contractRepository;
+        private readonly IContractRepository _contractRepository;
         private readonly IRepository<Accrual> _accrualRepository;
         private readonly IRepository<Payment> _paymentRepository;
 
@@ -26,7 +26,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
 
         public ReviseActController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
-            IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository,
+            IAccrualTypeRepository accrualTypeRepository, IContractRepository contractRepository,
             IRepository<Accrual> accrualRepository, IRepository<Payment> paymentRepository,
             UserManager<ApplicationUser> userManager)
         {

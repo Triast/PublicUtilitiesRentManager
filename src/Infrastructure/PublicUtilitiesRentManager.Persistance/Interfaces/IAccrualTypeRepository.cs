@@ -1,7 +1,7 @@
 ﻿using PublicUtilitiesRentManager.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace PublicUtilitiesRentManager.Infrastructure.Interfaces
+namespace PublicUtilitiesRentManager.Persistance.Interfaces
 {
     public interface IAccrualTypeRepository : IRepository<AccrualType>
     {

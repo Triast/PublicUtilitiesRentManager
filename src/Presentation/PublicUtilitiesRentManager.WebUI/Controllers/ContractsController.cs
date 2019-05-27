@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
-using PublicUtilitiesRentManager.Infrastructure.Interfaces;
+using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
@@ -18,13 +18,13 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         private readonly ITenantRepository _tenantRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IAccrualTypeRepository _accrualTypeRepository;
-        private readonly IRepository<Contract> _contractRepository;
+        private readonly IContractRepository _contractRepository;
 
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ContractsController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
-            IAccrualTypeRepository accrualTypeRepository, IRepository<Contract> contractRepository,
+            IAccrualTypeRepository accrualTypeRepository, IContractRepository contractRepository,
             UserManager<ApplicationUser> userManager
             )
         {
