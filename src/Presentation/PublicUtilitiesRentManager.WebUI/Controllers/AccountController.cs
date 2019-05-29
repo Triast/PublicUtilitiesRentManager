@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    // Todo: add posibility to assign tenant to user.
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

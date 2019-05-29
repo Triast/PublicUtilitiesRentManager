@@ -1,17 +1,54 @@
-﻿@inject UserManager<ApplicationUser> UserManager
+﻿@model  HomeViewModel
+
+@inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Главная";
 }
 
-<div class="text-center">
+@*<div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+</div>*@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    <div class="card my-5">
+        <h5 class="card-header">Заголовок</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Мониторинг расчётов</h5>
+                            <p class="card-text">Мониторинг производится по выбранной услуге и за указанный период.</p>
+                            <form asp-controller="CalculationMonitor" asp-action="index" method="get">
+                                @if (!User.IsInRole("User"))
+                                {
+                                    <label for="id">Арендатор:</label>
+                                    <select class="form-control" name="id" asp-items="Model.Tenants"></select>
+                                }
+
+                                <label for="accrualTypeId">Услуга:</label>
+                                <select class="form-control" name="accrualTypeId" asp-items="Model.AccrualTypes"></select>
+
+                                <label for="from">C:</label>
+                                <input type="date" name="start" class="form-control" />
+
+                                <label for="to">по:</label>
+                                <input type="date" name="end" class="form-control" />
+                                <br />
+
+                                <input type="submit" value="Перейти" class="btn btn-primary" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card my-5">
         <h5 class="card-header">Оплаты и начисления по договорам</h5>
         <div class="card-body">
@@ -58,31 +95,6 @@
         <h5 class="card-header">Акт сверки</h5>
         <div class="card-body">
             <div class="row">
-                @*<div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Договора</h5>
-                                @if (User.IsInRole("User"))
-                                {
-                                    <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
-                                }
-                                else
-                                {
-                                    <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
-                                }
-                                <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Начисления</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    </div>*@
                 <div class="col-sm-4">
                     <div class="card">
                         <div class="card-body">
@@ -109,22 +121,6 @@
         <h5 class="card-header">Заключение договоров</h5>
         <div class="card-body">
             <div class="row">
-                @*<div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Договора</h5>
-                            @if (User.IsInRole("User"))
-                            {
-                                <p class="card-text">Список договоров, заключённых Вами с арендодателем.</p>
-                            }
-                            else
-                            {
-                                <p class="card-text">Список договоров, заключённых арендаторами с арендодателем.</p>
-                            }
-                            <a asp-controller="Contracts" asp-action="Index" class="btn btn-primary">Перейти</a>
-                        </div>
-                    </div>
-                </div>*@
                 <div class="col-sm-4">
                     <div class="card">
                         <div class="card-body">
@@ -134,24 +130,6 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">За период</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <form asp-controller="ReviseAct" asp-action="Index" method="get">
-                                <label for="from">C:</label>
-                                <input type="date" name="from" class="form-control" />
-
-                                <label for="to">по:</label>
-                                <input type="date" name="to" class="form-control" />
-                                <br />
-
-                                <input type="submit" value="Перейти" class="btn btn-primary" />
-                            </form>
-                        </div>
-                    </div>
-                </div>*@
             </div>
         </div>
     </div>

@@ -1,0 +1,156 @@
+﻿@model CalculationMonitorViewModel
+
+@{
+    ViewData["Title"] = Model.AccrualTypeName;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.AccrualTypeName за период (@Model.Start.ToShortDateString() - @Model.End.ToShortDateString())</h1>
+</div>
+
+<a asp-action="Index" asp-route-id="@Model.TenantId" asp-route-start="@Model.Start.ToString("yyyy-MM-dd")" asp-route-end="@Model.End.ToString("yyyy-MM-dd")">Перейти к сводному</a>
+
+<table class="table mt-2">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OpeningBalance)
+            </th>
+            <th>
+                Начислено
+            </th>
+            <th>
+                Оплачено
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosingBalance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.OpeningBalance)
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="showAccruals()">@Model.Accruals.Sum(a => a.Summ) <i class="fas fa-angle-down"></i></button>
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="showPayments()">@Model.Payments.Sum(p => p.Summ) <i class="fas fa-angle-down"></i></button>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.ClosingBalance)
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="accrualsTable" class="d-none">
+    <h2>Начислено за период</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accruals.First().AccrualDate)
+                </th>
+                <th>
+                    № счёт фактуры
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Accruals.First().Summ)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var accrual in Model.Accruals)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => accrual.AccrualDate)
+                    </td>
+                    <td>
+                        Missing
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => accrual.Summ)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>Итого</td>
+                <td></td>
+                <td>@Model.Accruals.Sum(a => a.Summ)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="paymentsTable" class="d-none">
+    <h2>Оплачено за период</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Payments.First().PaymentDate)
+                </th>
+                <th>
+                    № платёжного поручения
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Payments.First().Summ)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model.Payments)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => payment.PaymentDate)
+                    </td>
+                    <td>
+                        Missing
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => payment.Summ)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>Итого</td>
+                <td></td>
+                <td>@Model.Payments.Sum(a => a.Summ)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function showAccruals() {
+            let accrualsTable = document.getElementById("accrualsTable");
+            let paymentsTable = document.getElementById("paymentsTable");
+
+            if (accrualsTable.classList.contains("d-none")) {
+                accrualsTable.classList.remove("d-none");
+            }
+            if (!paymentsTable.classList.contains("d-none")) {
+                paymentsTable.classList.add("d-none");
+            }
+        }
+
+        function showPayments() {
+            let accrualsTable = document.getElementById("accrualsTable");
+            let paymentsTable = document.getElementById("paymentsTable");
+
+            if (paymentsTable.classList.contains("d-none")) {
+                paymentsTable.classList.remove("d-none");
+            }
+            if (!accrualsTable.classList.contains("d-none")) {
+                accrualsTable.classList.add("d-none");
+            }
+        }
+    </script>
+}

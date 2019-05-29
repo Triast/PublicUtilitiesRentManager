@@ -12,7 +12,7 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: add breadcrumbs for views.
+    // Todo: add breadcrumbs for views. Add CRUD.
     [Authorize]
     public class PaymentsController : Controller
     {

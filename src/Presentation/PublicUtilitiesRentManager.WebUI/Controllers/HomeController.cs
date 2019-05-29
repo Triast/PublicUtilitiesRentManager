@@ -4,15 +4,38 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ITenantRepository _tenantRepository;
+        private readonly IAccrualTypeRepository _accrualTypeRepository;
+
+        public HomeController(IAccrualTypeRepository accrualTypeRepository, ITenantRepository tenantRepository)
         {
-            return View();
+            _tenantRepository = tenantRepository;
+            _accrualTypeRepository = accrualTypeRepository;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
+            var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(a => a.Name).ToList();
+            accrualTypes.Add(new Domain.Entities.AccrualType() { Id = null, Name = "Сводный" });
+            var tenantSelectList = new SelectList(tenants, "Id", "Name", tenants.First());
+            var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First(a => String.IsNullOrEmpty(a.Id)));
+
+            var vm = new HomeViewModel
+            {
+                Tenants = tenantSelectList,
+                AccrualTypes = accrualTypesSelectList
+            };
+
+            return View(vm);
         }
 
         public IActionResult Privacy()

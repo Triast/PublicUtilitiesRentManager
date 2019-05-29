@@ -12,6 +12,7 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
+    // Todo: add CRUD.
     [Authorize]
     public class ContractsController : Controller
     {

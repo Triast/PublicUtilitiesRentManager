@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: Add authentication rules for controllers. Add posibilities to show revise act
-    // for specific tenant, accrual type and period.
+    // Todo: Add authentication rules for controllers. Redesign revise act.
     public class ReviseActController : Controller
     {
         private readonly ITenantRepository _tenantRepository;

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<CalculationMonitorEntryViewModel>
+
+@{
+    ViewData["Title"] = "Сводный";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Сводный за период (@ViewBag.StartDate.ToShortDateString() - @ViewBag.EndDate.ToShortDateString())</h1>
+</div>
+
+<table class="table mt-2">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AccrualTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpeningBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccrualsSum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentsSum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosingBalance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a asp-action="Index" asp-route-accrualTypeId="@item.AccrualTypeId"
+                   asp-route-id="@item.TenantId"
+                   asp-route-start="@ViewBag.StartDate.ToString("yyyy-MM-dd")" asp-route-end="@ViewBag.EndDate.ToString("yyyy-MM-dd")">@Html.DisplayFor(modelItem => item.AccrualTypeName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpeningBalance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccrualsSum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentsSum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosingBalance)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

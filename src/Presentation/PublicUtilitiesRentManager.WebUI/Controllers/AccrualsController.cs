@@ -12,13 +12,14 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    //Todo: add breadcrumbs for views.
+    //Todo: add breadcrumbs for views. Add CRUD.
     [Authorize]
     public class AccrualsController : Controller
     {
         private readonly ITenantRepository _tenantRepository;
         private readonly IRoomRepository _roomRepository;
         private readonly IAccrualTypeRepository _accrualTypeRepository;
+        private readonly ICalcCoefficientRepository _calcCoefficientRepository;
         private readonly IContractRepository _contractRepository;
         private readonly IRepository<Accrual> _accrualRepository;
 
@@ -27,11 +28,13 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public AccrualsController(
             ITenantRepository tenantRepository, IRoomRepository roomRepository,
             IAccrualTypeRepository accrualTypeRepository, IContractRepository contractRepository,
-            IRepository<Accrual> accrualRepository, UserManager<ApplicationUser> userManager)
+            IRepository<Accrual> accrualRepository, ICalcCoefficientRepository calcCoefficientRepository,
+            UserManager<ApplicationUser> userManager)
         {
             _tenantRepository = tenantRepository;
             _roomRepository = roomRepository;
             _accrualTypeRepository = accrualTypeRepository;
+            _calcCoefficientRepository = calcCoefficientRepository;
             _contractRepository = contractRepository;
             _accrualRepository = accrualRepository;
             _userManager = userManager;
@@ -56,13 +59,19 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public async Task<ActionResult> Create(string contractId)
         {
             var contract = await _contractRepository.GetByIdAsync(contractId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+            var baseRentRate =  (await _calcCoefficientRepository.GetByIdAsync("73163d80-28fa-45bf-8636-54dd4c33e5f1"))
+                .Coefficient;
             var accrual = new AccrualViewModel
             {
                 ContractId = contractId,
                 Tenant = (await _tenantRepository.GetByIdAsync(contract.TenantId)).Name,
-                Room = (await _roomRepository.GetByIdAsync(contract.RoomId)).Address,
+                Room = room.Address,
                 AccrualType = (await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId)).Name,
-                AccrualDate = DateTime.Now.Date
+                AccrualDate = DateTime.Now.Date,
+                Summ = (decimal)room.Square * (decimal)baseRentRate *
+                    room.ComfortCoef * room.IncreasingCoefToBaseRate *
+                    room.PlacementCoef * room.SocialOrientationCoef
             };
 
             return View(accrual);

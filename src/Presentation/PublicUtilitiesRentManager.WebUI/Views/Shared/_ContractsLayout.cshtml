@@ -2,8 +2,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <input id="searchQuery" class="col-md-4 form-control" type="text" />
+<div class="row justify-content-center">
+    @if (!User.IsInRole("User"))
+    {
+        <p class="col-sm-2 text-right">Арендатор: </p>
+        <input id="searchQuery" class="col-md-4 form-control" type="text" />
+    }
     <form id="contractForm" method="get">
         <input type="submit" value="Договора" class="btn btn-primary ml-2" onclick="copyQueryToContracts()" />
     </form>
@@ -16,21 +20,21 @@
 
     <script>
         function copyQueryToContracts() {
-            const searchQuery = document.getElementById("searchQuery");
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
             const form = document.getElementById("contractForm");
 
             form.action = "/Contracts/Index/" + searchQuery.value;
         }
 
         function copyQueryToAccruals() {
-            const searchQuery = document.getElementById("searchQuery");
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
             const form = document.getElementById("accrualForm");
 
             form.action = "/Accruals/Index/" + searchQuery.value;
         }
 
         function copyQueryToPayments() {
-            const searchQuery = document.getElementById("searchQuery");
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
             const form = document.getElementById("paymentForm");
 
             form.action = "/Payments/Index/" + searchQuery.value;

@@ -10,7 +10,7 @@
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
-<table class="table">
+<table class="table table-sm table-responsive-md table-hover">
     <thead>
         <tr>
             <th>
@@ -28,7 +28,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
-            <th></th>
+            @if (!User.IsInRole("User"))
+            {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -49,15 +52,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
-            <td>
-                <a class="btn btn-primary" asp-controller="Accruals" asp-action="Create" asp-route-contractId="@item.Id">+ начисление</a>
-                <a class="btn btn-primary" asp-controller="Payments" asp-action="Create" asp-route-contractId="@item.Id">+ оплата</a>
-            </td>
+            @if (!User.IsInRole("User"))
+            {
+                <td>
+                    <a class="btn btn-primary" asp-controller="Accruals" asp-action="Create" asp-route-contractId="@item.Id">+ начисление</a>
+                    <a class="btn btn-primary" asp-controller="Payments" asp-action="Create" asp-route-contractId="@item.Id">+ оплата</a>
+                </td>
+            }
             @*<td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>*@
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
         </tr>
 }
     </tbody>
