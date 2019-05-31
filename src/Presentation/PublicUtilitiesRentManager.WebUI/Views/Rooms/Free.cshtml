@@ -13,7 +13,7 @@
 
 <h1>Свободные помещения</h1>
 
-<table class="table">
+<table class="table table-sm">
     <thead>
         <tr>
             <th>
@@ -24,25 +24,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Square)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsOccupied)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IncreasingCoefToBaseRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlacementCoef)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ComfortCoef)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SocialOrientationCoef)
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -57,25 +38,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Square)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsOccupied)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IncreasingCoefToBaseRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlacementCoef)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ComfortCoef)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SocialOrientationCoef)
-                </td>
             </tr>
         }
     </tbody>

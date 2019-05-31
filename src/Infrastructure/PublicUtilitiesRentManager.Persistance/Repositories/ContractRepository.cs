@@ -13,12 +13,10 @@ namespace PublicUtilitiesRentManager.Persistance.Repositories
         private const string _sqlGetAllByTenantIdAndAccrualTypeId = @"SELECT * FROM Contracts
                                 WHERE TenantId = @TenantId AND AccrualTypeId = @AccrualTypeId;";
         private const string _sqlAdd = @"INSERT INTO Contracts VALUES (@Id, @TenantId,
-                                        @RoomId, @AccrualTypeId, @CalcCoefficientId,
-                                        @StartDate, @EndDate)";
+                                        @RoomId, @AccrualTypeId, @StartDate, @EndDate)";
         private const string _sqlUpdate = @"UPDATE Contracts
                                             SET TenantId = @TenantId, RoomId = @RoomId, AccrualTypeId = @AccrualTypeId,
-                                            CalcCoefficientId = @CalcCoefficientId, StartDate = @StartDate,
-                                            EndDate = @EndDate WHERE Id = @Id";
+                                            StartDate = @StartDate, EndDate = @EndDate WHERE Id = @Id";
         private const string _sqlRemove = "DELETE FROM Contracts WHERE Id = @Id";
 
         public ContractRepository(string connectionString) : base(connectionString) { }

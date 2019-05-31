@@ -9,9 +9,11 @@ namespace PublicUtilitiesRentManager.Persistance.Repositories
     {
         private const string _sqlGetById = "SELECT * FROM Payments WHERE Id = @Id;";
         private const string _sqlGetAll = "SELECT * FROM Payments;";
-        private const string _sqlAdd = "INSERT INTO Payments VALUES (@Id, @ContractId, @PaymentDate, @Summ)";
+        private const string _sqlAdd = @"INSERT INTO Payments VALUES (@Id, @ContractId, @PaymentOrderNumber,
+                                        @PaymentDate, @Summ)";
         private const string _sqlUpdate = @"UPDATE Payments SET ContractId = @ContractId,
-                                            PaymentDate = @PaymentDate, Summ = @Summ WHERE Id = @Id";
+                                            PaymentOrderNumber = @PaymentOrderNumber, PaymentDate = @PaymentDate,
+                                            Summ = @Summ WHERE Id = @Id";
         private const string _sqlRemove = "DELETE FROM Payments WHERE Id = @Id";
 
         public PaymentRepository(string connectionString) : base(connectionString) { }

@@ -14,6 +14,8 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         public string Room { get; set; }
         [Display(Name = "Услуга")]
         public string AccrualType { get; set; }
+        [Display(Name = "№ платёжного поручения")]
+        public int PaymentOrderNumber { get; set; }
         [Display(Name = "Дата оплаты")]
         [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
@@ -25,6 +27,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             {
                 Id = payment.Id,
                 ContractId = payment.ContractId,
+                PaymentOrderNumber = payment.PaymentOrderNumber,
                 PaymentDate = payment.PaymentDate,
                 Summ = payment.Summ
             };
@@ -34,6 +37,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             {
                 Id = paymentVM.Id,
                 ContractId = paymentVM.ContractId,
+                PaymentOrderNumber = paymentVM.PaymentOrderNumber,
                 PaymentDate = paymentVM.PaymentDate,
                 Summ = paymentVM.Summ
             };

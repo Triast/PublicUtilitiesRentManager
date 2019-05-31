@@ -19,7 +19,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         public async Task<ActionResult> Index() =>
-            View((await _repository.GetAllAsync()).Select(AccrualTypeViewModel.FromAccrualType));
+            View((await _repository.GetAllAsync()).OrderBy(t => t.Name).Select(AccrualTypeViewModel.FromAccrualType));
 
         public async Task<ActionResult> Details(string id) =>
             View(AccrualTypeViewModel.FromAccrualType(await _repository.GetByNameAsync(id)));

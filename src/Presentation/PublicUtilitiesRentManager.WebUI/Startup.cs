@@ -92,6 +92,7 @@ namespace PublicUtilitiesRentManager.WebUI
             services.AddTransient<IRepository<Accrual>, AccrualRepository>(_ => new AccrualRepository(connectionString));
             services.AddTransient<IRepository<Payment>, PaymentRepository>(_ => new PaymentRepository(connectionString));
 
+            services.AddSession();
             services.AddMvc()
                 .AddNewtonsoftJson();
         }
@@ -114,6 +115,8 @@ namespace PublicUtilitiesRentManager.WebUI
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCookiePolicy();
+            app.UseSession();
             app.UseRouting(routes =>
             {
                 routes.MapControllerRoute(
@@ -121,8 +124,6 @@ namespace PublicUtilitiesRentManager.WebUI
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRazorPages();
             });
-
-            app.UseCookiePolicy();
         }
     }
 }

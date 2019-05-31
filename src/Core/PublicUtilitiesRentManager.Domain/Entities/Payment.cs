@@ -6,6 +6,7 @@ namespace PublicUtilitiesRentManager.Domain.Entities
     {
         public string Id { get; set; }
         public string ContractId { get; set; }
+        public int PaymentOrderNumber { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal Summ { get; set; }
     }

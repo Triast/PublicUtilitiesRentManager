@@ -1,4 +1,5 @@
-﻿using PublicUtilitiesRentManager.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PublicUtilitiesRentManager.Domain.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,8 +24,23 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
+        public SelectList Tenants { get; set; }
+        public SelectList Rooms { get; set; }
+        public SelectList AccrualTypes { get; set; }
+
         public static ContractViewModel FromContract(Contract contract) =>
             new ContractViewModel
+            {
+                Id = contract.Id,
+                TenantId = contract.TenantId,
+                RoomId = contract.RoomId,
+                AccrualTypeId = contract.AccrualTypeId,
+                StartDate = contract.StartDate,
+                EndDate = contract.EndDate
+            };
+
+        public static Contract FromContractViewModel(ContractViewModel contract) =>
+            new Contract
             {
                 Id = contract.Id,
                 TenantId = contract.TenantId,

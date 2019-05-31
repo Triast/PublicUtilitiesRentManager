@@ -4,13 +4,21 @@
     ViewData["Title"] = Model.AccrualTypeName;
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item"><a asp-controller="CalculationMonitor" asp-action="Index">Мониторинг расчётов</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.AccrualTypeName</li>
+    </ol>
+</nav>
+
 <div class="text-center">
     <h1 class="display-4">@Model.AccrualTypeName за период (@Model.Start.ToShortDateString() - @Model.End.ToShortDateString())</h1>
 </div>
 
 <a asp-action="Index" asp-route-id="@Model.TenantId" asp-route-start="@Model.Start.ToString("yyyy-MM-dd")" asp-route-end="@Model.End.ToString("yyyy-MM-dd")">Перейти к сводному</a>
 
-<table class="table mt-2">
+<table class="table table-sm table-responsive-md table-hover mt-2">
     <thead>
         <tr>
             <th>
@@ -55,7 +63,7 @@
                     @Html.DisplayNameFor(model => model.Accruals.First().AccrualDate)
                 </th>
                 <th>
-                    № счёт фактуры
+                    @Html.DisplayNameFor(model => model.Accruals.First().InvoiceNumber)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Accruals.First().Summ)
@@ -70,7 +78,7 @@
                         @Html.DisplayFor(modelItem => accrual.AccrualDate)
                     </td>
                     <td>
-                        Missing
+                        @Html.DisplayFor(modelItem => accrual.InvoiceNumber)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => accrual.Summ)
@@ -96,7 +104,7 @@
                     @Html.DisplayNameFor(model => model.Payments.First().PaymentDate)
                 </th>
                 <th>
-                    № платёжного поручения
+                    @Html.DisplayNameFor(model => model.Payments.First().PaymentOrderNumber)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Payments.First().Summ)
@@ -111,7 +119,7 @@
                         @Html.DisplayFor(modelItem => payment.PaymentDate)
                     </td>
                     <td>
-                        Missing
+                        @Html.DisplayFor(modelItem => payment.PaymentOrderNumber)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => payment.Summ)

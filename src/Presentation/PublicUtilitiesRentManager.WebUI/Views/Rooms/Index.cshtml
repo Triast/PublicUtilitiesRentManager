@@ -19,14 +19,14 @@
         <a asp-action="Create">Создать</a>
     </p>
 }
-<table class="table">
+<table class="table table-sm">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RoomType)
+                @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.RoomType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Square)
@@ -55,46 +55,46 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RoomType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Square)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsOccupied)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IncreasingCoefToBaseRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlacementCoef)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ComfortCoef)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SocialOrientationCoef)
-                </td>
-                <td>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Address }) <span>|</span>
-                    }
-                    @Html.ActionLink("Подробнее", "Details", new { id = item.Address })
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <span>|</span> @Html.ActionLink("Удалить", "Delete", new { id = item.Address })
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Square)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsOccupied)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IncreasingCoefToBaseRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlacementCoef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ComfortCoef)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SocialOrientationCoef)
+            </td>
+            <td>
+                @if (User.IsInRole("Administrator"))
+                {
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Address }) <span>|</span>
+                }
+                @Html.ActionLink("Подробнее", "Details", new { id = item.Address })
+                @if (User.IsInRole("Administrator"))
+                {
+                    <span>|</span> @Html.ActionLink("Удалить", "Delete", new { id = item.Address })
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

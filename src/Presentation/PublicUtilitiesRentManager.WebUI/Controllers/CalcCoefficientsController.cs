@@ -19,7 +19,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         public async Task<ActionResult> Index() =>
-            View((await _repository.GetAllAsync()).Select(CalcCoefficientViewModel.FromCalcCoefficient));
+            View((await _repository.GetAllAsync()).OrderBy(c => c.Name).Select(CalcCoefficientViewModel.FromCalcCoefficient));
 
         public async Task<ActionResult> Details(string id) =>
             View(CalcCoefficientViewModel.FromCalcCoefficient(await _repository.GetByNameAsync(id)));

@@ -2,14 +2,60 @@
 
 @{
     ViewData["Title"] = "Договора";
-    Layout = "~/Views/Shared/_ContractsLayout.cshtml";
 }
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Договора</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center">
+    @if (!User.IsInRole("User"))
+    {
+        <p class="col-sm-2 text-right">Арендатор: </p>
+        <input id="searchQuery" class="col-md-4 form-control" type="text" />
+    }
+    <form id="contractForm" method="get">
+        <input type="submit" value="Договора" class="btn btn-primary ml-2" onclick="copyQueryToContracts()" />
+    </form>
+    <form id="accrualForm" method="get">
+        <input type="submit" value="Начисления" class="btn btn-primary ml-2" onclick="copyQueryToAccruals()" />
+    </form>
+    <form id="paymentForm" method="get">
+        <input type="submit" value="Оплаты" class="btn btn-primary ml-2" onclick="copyQueryToPayments()" />
+    </form>
+
+    <script>
+        function copyQueryToContracts() {
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
+            const form = document.getElementById("contractForm");
+
+            form.action = "/Contracts/Index/" + searchQuery.value;
+        }
+
+        function copyQueryToAccruals() {
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
+            const form = document.getElementById("accrualForm");
+
+            form.action = "/Accruals/Index/" + searchQuery.value;
+        }
+
+        function copyQueryToPayments() {
+            const searchQuery = document.getElementById("searchQuery") || { value: "" };
+            const form = document.getElementById("paymentForm");
+
+            form.action = "/Payments/Index/" + searchQuery.value;
+        }
+    </script>
+</div>
 
 <h1>Договора</h1>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
+<p>
+    <a asp-action="Create">Составить новый</a>
+</p>
 <table class="table table-sm table-responsive-md table-hover">
     <thead>
         <tr>
@@ -31,40 +77,41 @@
             @if (!User.IsInRole("User"))
             {
                 <th></th>
+                <th></th>
             }
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tenant)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Room)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccrualType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            @if (!User.IsInRole("User"))
-            {
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
-                    <a class="btn btn-primary" asp-controller="Accruals" asp-action="Create" asp-route-contractId="@item.Id">+ начисление</a>
-                    <a class="btn btn-primary" asp-controller="Payments" asp-action="Create" asp-route-contractId="@item.Id">+ оплата</a>
+                    @Html.DisplayFor(modelItem => item.Tenant)
                 </td>
-            }
-            @*<td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>*@
-        </tr>
-}
+                <td>
+                    <a asp-controller="Rooms" asp-action="Details" asp-route-id="@item.Room">@Html.DisplayFor(modelItem => item.Room)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccrualType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                @if (!User.IsInRole("User"))
+                {
+                    <td>
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Accruals" asp-action="Create" asp-route-contractId="@item.Id">+ начисление</a>
+                        <a class="btn btn-primary" asp-controller="Payments" asp-action="Create" asp-route-contractId="@item.Id">+ оплата</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

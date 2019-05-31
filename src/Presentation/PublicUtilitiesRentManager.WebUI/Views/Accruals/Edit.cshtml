@@ -1,25 +1,27 @@
-﻿@model PublicUtilitiesRentManager.WebUI.Models.PaymentViewModel
+﻿@model PublicUtilitiesRentManager.WebUI.Models.AccrualViewModel
 
 @{
-    ViewData["Title"] = "Оплата";
+    ViewData["Title"] = "Редактирование";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-        <li class="breadcrumb-item"><a asp-controller="Payments" asp-action="Index">Оплаты</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Оплата</li>
+        <li class="breadcrumb-item"><a asp-controller="Accruals" asp-action="Index">Начисления</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Удаление</li>
     </ol>
 </nav>
 
-<h1>Оплата</h1>
+<h1>Редактирование</h1>
 
+<h4>Начисление</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ContractId" />
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" id="ContractId" name="ContractId" value="@Model.ContractId" />
             <div class="form-group">
                 <label asp-for="Tenant" class="control-label"></label>
                 <input asp-for="Tenant" class="form-control" readonly />
@@ -33,14 +35,14 @@
                 <input asp-for="AccrualType" class="form-control" readonly />
             </div>
             <div class="form-group">
-                <label asp-for="PaymentOrderNumber" class="control-label"></label>
-                <input asp-for="PaymentOrderNumber" class="form-control" />
-                <span asp-validation-for="PaymentOrderNumber" class="text-danger"></span>
+                <label asp-for="InvoiceNumber" class="control-label"></label>
+                <input asp-for="InvoiceNumber" class="form-control" />
+                <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label"></label>
-                <input asp-for="PaymentDate" class="form-control" />
-                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                <label asp-for="AccrualDate" class="control-label"></label>
+                <input asp-for="AccrualDate" class="form-control" />
+                <span asp-validation-for="AccrualDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Summ" class="control-label"></label>
@@ -48,13 +50,13 @@
                 <span asp-validation-for="Summ" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Создать" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-controller="Contracts" asp-action="Index">Вернуться к списку</a>
+    <a asp-action="Index">Вернуться к списку</a>
 </div>
 

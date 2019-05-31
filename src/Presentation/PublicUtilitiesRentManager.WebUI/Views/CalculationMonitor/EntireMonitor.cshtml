@@ -4,11 +4,18 @@
     ViewData["Title"] = "Сводный";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Мониторинг расчётов</li>
+    </ol>
+</nav>
+
 <div class="text-center">
     <h1 class="display-4">Сводный за период (@ViewBag.StartDate.ToShortDateString() - @ViewBag.EndDate.ToShortDateString())</h1>
 </div>
 
-<table class="table mt-2">
+<table class="table table-sm table-responsive-md table-hover mt-2">
     <thead>
         <tr>
             <th>
@@ -31,25 +38,25 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                <a asp-action="Index" asp-route-accrualTypeId="@item.AccrualTypeId"
-                   asp-route-id="@item.TenantId"
-                   asp-route-start="@ViewBag.StartDate.ToString("yyyy-MM-dd")" asp-route-end="@ViewBag.EndDate.ToString("yyyy-MM-dd")">@Html.DisplayFor(modelItem => item.AccrualTypeName)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OpeningBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccrualsSum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentsSum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingBalance)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <a asp-action="Index" asp-route-accrualTypeId="@item.AccrualTypeId"
+                       asp-route-id="@item.TenantId"
+                       asp-route-start="@ViewBag.StartDate.ToString("yyyy-MM-dd")" asp-route-end="@ViewBag.EndDate.ToString("yyyy-MM-dd")">@Html.DisplayFor(modelItem => item.AccrualTypeName)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpeningBalance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccrualsSum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentsSum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClosingBalance)
+                </td>
+            </tr>
         }
     </tbody>
 </table>

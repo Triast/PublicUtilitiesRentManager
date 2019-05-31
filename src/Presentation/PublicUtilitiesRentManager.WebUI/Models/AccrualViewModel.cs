@@ -13,6 +13,8 @@ namespace PublicUtilitiesRentManager.WebUI.Models
         public string Tenant { get; set; }
         [Display(Name = "Помещение")]
         public string Room { get; set; }
+        [Display(Name = "№ счёт-фактуры")]
+        public int InvoiceNumber { get; set; }
         [Display(Name = "Услуга")]
         public string AccrualType { get; set; }
         [Display(Name = "Дата начисления")]
@@ -26,6 +28,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             {
                 Id = accrual.Id,
                 ContractId = accrual.ContractId,
+                InvoiceNumber = accrual.InvoiceNumber,
                 AccrualDate = accrual.AccrualDate,
                 Summ = accrual.Summ
             };
@@ -35,6 +38,7 @@ namespace PublicUtilitiesRentManager.WebUI.Models
             {
                 Id = accrualVM.Id,
                 ContractId = accrualVM.ContractId,
+                InvoiceNumber = accrualVM.InvoiceNumber,
                 AccrualDate = accrualVM.AccrualDate,
                 Summ = accrualVM.Summ
             };

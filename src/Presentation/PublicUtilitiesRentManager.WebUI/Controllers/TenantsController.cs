@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: Add Automapper. Think about domain entities in Create, Update and Delete methods.
     [Authorize(Roles = "Administrator,Manager")]
     public class TenantsController : Controller
     {
@@ -20,7 +19,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         public async Task<ActionResult> Index() =>
-            View((await _repository.GetAllAsync()).Select(TenantViewModel.FromTenant));
+            View((await _repository.GetAllAsync()).OrderBy(t => t.Name).Select(TenantViewModel.FromTenant));
 
         public async Task<ActionResult> Details(string id) =>
             View(TenantViewModel.FromTenant(await _repository.GetByNameAsync(id)));

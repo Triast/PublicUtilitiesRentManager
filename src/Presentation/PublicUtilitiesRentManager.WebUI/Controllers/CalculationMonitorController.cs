@@ -11,7 +11,6 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: Make tables responsive.
     public class CalculationMonitorController : Controller
     {
         private readonly ITenantRepository _tenantRepository;
@@ -90,7 +89,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                     ViewBag.StartDate = start;
                     ViewBag.EndDate = end;
 
-                    return View("EntireMonitor", entries);
+                    return View("EntireMonitor", entries.OrderBy(e => e.AccrualTypeName));
                 }
             }
 

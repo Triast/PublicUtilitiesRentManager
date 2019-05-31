@@ -23,7 +23,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var rooms = (await _repository.GetAllAsync()).Select(RoomViewModel.FromRoom).ToList();
+            var rooms = (await _repository.GetAllAsync()).OrderBy(r => r.Address).Select(RoomViewModel.FromRoom).ToList();
             var getRoomTypeTasks = new List<Task>();
 
             foreach (var room in rooms)
@@ -148,6 +148,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         {
             var rooms = (await _repository.GetAllAsync())
                 .Where(r => !r.IsOccupied)
+                .OrderBy(r => r.Address)
                 .Select(RoomViewModel.FromRoom).ToList();
             var getRoomTypeTasks = new List<Task>();
 

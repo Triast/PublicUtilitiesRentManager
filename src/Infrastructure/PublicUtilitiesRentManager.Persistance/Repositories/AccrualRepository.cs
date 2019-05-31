@@ -9,8 +9,8 @@ namespace PublicUtilitiesRentManager.Persistance.Repositories
     {
         private const string _sqlGetById = "SELECT * FROM Accruals WHERE Id = @Id;";
         private const string _sqlGetAll = "SELECT * FROM Accruals;";
-        private const string _sqlAdd = "INSERT INTO Accruals VALUES (@Id, @ContractId, @AccrualDate, @Summ)";
-        private const string _sqlUpdate = @"UPDATE Accruals SET ContractId = @ContractId,
+        private const string _sqlAdd = "INSERT INTO Accruals VALUES (@Id, @ContractId, @InvoiceNumber, @AccrualDate, @Summ)";
+        private const string _sqlUpdate = @"UPDATE Accruals SET ContractId = @ContractId, InvoiceNumber = @InvoiceNumber,
                                             AccrualDate = @AccrualDate, Summ = @Summ WHERE Id = @Id";
         private const string _sqlRemove = "DELETE FROM Accruals WHERE Id = @Id";
 

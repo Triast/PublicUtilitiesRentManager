@@ -21,7 +21,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         }
 
         public async Task<ActionResult> Index() =>
-            View((await _repository.GetAllAsync()).Select(RoomTypeViewModel.FromRoomType));
+            View((await _repository.GetAllAsync()).OrderBy(t => t.Name).Select(RoomTypeViewModel.FromRoomType));
 
         public async Task<ActionResult> Details(string id) =>
             View(RoomTypeViewModel.FromRoomType(await _repository.GetByNameAsync(id)));

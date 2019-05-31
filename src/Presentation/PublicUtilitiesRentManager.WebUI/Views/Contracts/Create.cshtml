@@ -1,0 +1,55 @@
+﻿@model PublicUtilitiesRentManager.WebUI.Models.ContractViewModel
+
+@{
+    ViewData["Title"] = "Составление";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Contracts" asp-action="Index">Договора</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Составление</li>
+    </ol>
+</nav>
+
+<h1>Составление</h1>
+
+<h4>Договор</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Tenant" class="control-label"></label>
+                <select asp-for="TenantId" asp-items="Model.Tenants" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Room" class="control-label"></label>
+                <select asp-for="RoomId" asp-items="Model.Rooms" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccrualType" class="control-label"></label>
+                <select asp-for="AccrualTypeId" asp-items="Model.AccrualTypes" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться к списку</a>
+</div>
+

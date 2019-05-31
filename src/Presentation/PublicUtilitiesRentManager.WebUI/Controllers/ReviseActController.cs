@@ -38,7 +38,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(string tenant, string accrualType, DateTime? from, DateTime? to)
+        public async Task<IActionResult> Index(string id, string accrualType, DateTime? from, DateTime? to)
         {
             string userId = User.IsInRole("User") ? _userManager.GetUserId(User) : null;
 
@@ -46,25 +46,33 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             var payments = (await GetPaymentViewModels(userId)).Select(GenericAct.FromPaymentViewModel);
             var acts = new List<GenericAct>();
 
-            acts.AddRange(accruals);
+            foreach (var accrual in accruals)
+            {
+                var act = acts.FirstOrDefault(a => a.Date.Month == accrual.Date.Month && a.Date.Year == accrual.Date.Year);
+
+                if (act != null)
+                {
+                    act.Summ += accrual.Summ;
+                }
+                else
+                {
+                    acts.Add(accrual);
+                }
+            }
             acts.AddRange(payments);
 
             var actsFiltered = acts.AsEnumerable();
 
-            if (!string.IsNullOrWhiteSpace(tenant))
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                actsFiltered = actsFiltered.Where(a => a.Tenant.StartsWith(tenant));
-            }
-            if (!string.IsNullOrWhiteSpace(accrualType))
-            {
-                actsFiltered = actsFiltered.Where(a => a.AccrualType.StartsWith(accrualType));
+                var tenant = await _tenantRepository.GetByIdAsync(id);
+                actsFiltered = actsFiltered.Where(a => a.Tenant == tenant.Name);
             }
 
             var fromDate = from?.Date ?? new DateTime();
             var toDate = to?.Date ?? DateTime.Now.Date;
 
             actsFiltered = actsFiltered.Where(a => a.Date >= fromDate && a.Date <= toDate);
-
             return View(actsFiltered.OrderBy(a => a.Date));
         }
 

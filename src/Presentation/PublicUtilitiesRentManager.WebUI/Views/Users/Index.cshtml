@@ -1,0 +1,61 @@
+﻿@model IEnumerable<PublicUtilitiesRentManager.WebUI.Models.AccountViewModels.IndexViewModel>
+
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Пользователи</li>
+    </ol>
+</nav>
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create">Создать нового</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsEmailConfirmed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tenant)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tenant)
+            </td>
+            <td>
+                @Html.ActionLink("Редактировать", "Edit", new { email = item.Email }) |
+                @Html.ActionLink("Детали", "Details", new { email = item.Email }) |
+                @Html.ActionLink("Удалить", "Delete", new { email = item.Email })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

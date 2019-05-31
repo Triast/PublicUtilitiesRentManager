@@ -8,68 +8,31 @@
     var subtraction = accrualSum - paymentSum;
 }
 
-<h1>Акт сверки</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Акт сверки</li>
+    </ol>
+</nav>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Index" method="get">
-            <div class="form-group">
-                <label class="control-label">Арендатор:</label>
-                <input type="text" class="form-control" name="tenant" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">Услуга:</label>
-                <input type="text" class="form-control" name="accrualType" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">С:</label>
-                <input type="date" class="form-control" name="from" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">По:</label>
-                <input type="date" class="form-control" name="to" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Применить" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<h1>Акт сверки</h1>
 
 <div class="row justify-content-between">
     <p class="col-md-2">Входящее сальдо: @(subtraction < 0m ? (-subtraction).ToString("F2") : "")</p>
     <p class="col-md-2">Исходящее сальдо: @(subtraction > 0m ? subtraction.ToString("F2") : "")</p>
 </div>
 <div class="row justify-content-between">
-    <h2 class="col-md-2">Начислено</h2>
-    <h2 class="col-md-2">Оплачено</h2>
+    <h2 class="col-6 text-right">Начислено</h2>
+    <h2 class="col-6 text-right">Оплачено</h2>
 </div>
-<table class="table">
+<table class="table table-sm table-responsive-md table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Tenant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Room)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccrualType)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Summ)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tenant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Room)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccrualType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
@@ -87,23 +50,11 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Tenant)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Room)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AccrualType)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Summ)
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -113,18 +64,6 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tenant)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Room)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AccrualType)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Date)
                     </td>
@@ -134,17 +73,11 @@
                 </tr>
             }
         }
-    <tr>
-        <td>Итог:</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>@accrualSum.ToString("F2")</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>@paymentSum.ToString("F2")</td>
-    </tr>
+        <tr>
+            <td>Итог:</td>
+            <td>@accrualSum.ToString("F2")</td>
+            <td></td>
+            <td>@paymentSum.ToString("F2")</td>
+        </tr>
     </tbody>
 </table>

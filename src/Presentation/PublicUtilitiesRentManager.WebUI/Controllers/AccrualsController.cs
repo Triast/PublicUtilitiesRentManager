@@ -12,7 +12,6 @@ using PublicUtilitiesRentManager.WebUI.Models;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    //Todo: add breadcrumbs for views. Add CRUD.
     [Authorize]
     public class AccrualsController : Controller
     {
@@ -59,19 +58,46 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public async Task<ActionResult> Create(string contractId)
         {
             var contract = await _contractRepository.GetByIdAsync(contractId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
             var room = await _roomRepository.GetByIdAsync(contract.RoomId);
-            var baseRentRate =  (await _calcCoefficientRepository.GetByIdAsync("73163d80-28fa-45bf-8636-54dd4c33e5f1"))
-                .Coefficient;
+
+            var sum = 0m;
+            var rate = 0.0;
+
+            switch (accrualType.Name)
+            {
+                case "Аренда":
+                    rate = (await _calcCoefficientRepository
+                        .GetByIdAsync("73163d80-28fa-45bf-8636-54dd4c33e5f1"))
+                        .Coefficient;
+                    sum = (decimal)room.Square * (decimal)rate *
+                        room.ComfortCoef * room.IncreasingCoefToBaseRate *
+                        room.PlacementCoef * room.SocialOrientationCoef *
+                        room.Price;
+                    break;
+                case "Техобслуживание":
+                    rate = (await _calcCoefficientRepository
+                        .GetByIdAsync("e557209d-ce5e-4924-952f-3b1751e346dc"))
+                        .Coefficient;
+                    sum = (decimal)(room.Square * rate);
+                    break;
+                case "Капремонт":
+                    rate = (await _calcCoefficientRepository
+                        .GetByIdAsync("7cbbe0f0-b840-409f-aa38-4259f4e1ee82"))
+                        .Coefficient;
+                    sum = (decimal)(room.Square * rate);
+                    break;
+            }
+
             var accrual = new AccrualViewModel
             {
                 ContractId = contractId,
                 Tenant = (await _tenantRepository.GetByIdAsync(contract.TenantId)).Name,
                 Room = room.Address,
+                InvoiceNumber = 0,
                 AccrualType = (await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId)).Name,
                 AccrualDate = DateTime.Now.Date,
-                Summ = (decimal)room.Square * (decimal)baseRentRate *
-                    room.ComfortCoef * room.IncreasingCoefToBaseRate *
-                    room.PlacementCoef * room.SocialOrientationCoef
+                Summ = sum
             };
 
             return View(accrual);
@@ -101,6 +127,78 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 ModelState.AddModelError("", e.Message);
 
                 return View(accrualVM);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Edit(string id)
+        {
+            var accrual = await _accrualRepository.GetByIdAsync(id);
+            var contract = await _contractRepository.GetByIdAsync(accrual.ContractId);
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+
+            var vm = AccrualViewModel.FromAccrual(accrual);
+            vm.Tenant = tenant.Name;
+            vm.AccrualType = accrualType.Name;
+            vm.Room = room.Address;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(AccrualViewModel accrual)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(accrual);
+            }
+
+            try
+            {
+                await _accrualRepository.UpdateAsync(AccrualViewModel.FromAccrualViewModel(accrual));
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(accrual);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var accrual = await _accrualRepository.GetByIdAsync(id);
+            var contract = await _contractRepository.GetByIdAsync(accrual.ContractId);
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+
+            var vm = AccrualViewModel.FromAccrual(accrual);
+            vm.Tenant = tenant.Name;
+            vm.AccrualType = accrualType.Name;
+            vm.Room = room.Address;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirm(string id)
+        {
+            try
+            {
+                await _accrualRepository.RemoveAsync(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
             }
         }
 

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.Identity.Dapper;
+﻿using AspNetCore.Identity.Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PublicUtilitiesRentManager.Domain.Entities;
 using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: add breadcrumbs for views. Add CRUD.
     [Authorize]
     public class PaymentsController : Controller
     {
@@ -62,6 +61,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 Tenant = (await _tenantRepository.GetByIdAsync(contract.TenantId)).Name,
                 Room = (await _roomRepository.GetByIdAsync(contract.RoomId)).Address,
                 AccrualType = (await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId)).Name,
+                PaymentOrderNumber = 0,
                 PaymentDate = DateTime.Now.Date
             };
 
@@ -92,6 +92,78 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 ModelState.AddModelError("", e.Message);
 
                 return View(paymentVM);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Edit(string id)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(id);
+            var contract = await _contractRepository.GetByIdAsync(payment.ContractId);
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+
+            var vm = PaymentViewModel.FromPayment(payment);
+            vm.Tenant = tenant.Name;
+            vm.AccrualType = accrualType.Name;
+            vm.Room = room.Address;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(PaymentViewModel payment)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(payment);
+            }
+
+            try
+            {
+                await _paymentRepository.UpdateAsync(PaymentViewModel.FromPaymentViewModel(payment));
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(payment);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(id);
+            var contract = await _contractRepository.GetByIdAsync(payment.ContractId);
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+
+            var vm = PaymentViewModel.FromPayment(payment);
+            vm.Tenant = tenant.Name;
+            vm.AccrualType = accrualType.Name;
+            vm.Room = room.Address;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirm(string id)
+        {
+            try
+            {
+                await _paymentRepository.RemoveAsync(id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
             }
         }
 

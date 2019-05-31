@@ -14,8 +14,8 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="card my-5">
-        <h5 class="card-header">Заголовок</h5>
+    <div class="card my-2">
+        <h5 class="card-header">Клиентские функции</h5>
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-4">
@@ -45,11 +45,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Помещения</h5>
+                            <p class="card-text">Просмотр свободных помещений, на которые возможно составление договора аренды.</p>
+                            <a asp-controller="Rooms" asp-action="Free" class="btn btn-primary">Перейти</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card my-5">
+    <div class="card my-2">
         <h5 class="card-header">Оплаты и начисления по договорам</h5>
         <div class="card-body">
             <div class="row">
@@ -73,7 +82,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Начисления</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <p class="card-text">Список начислений, начисленных Вам за услуги.</p>
                             <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
                         </div>
                     </div>
@@ -82,7 +91,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Оплаты</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <p class="card-text">Список оплат, произведённых Вами за услуги.</p>
                             <a asp-controller="Payments" asp-action="Index" class="btn btn-primary">Go somewhere</a>
                         </div>
                     </div>
@@ -91,7 +100,7 @@
         </div>
     </div>
 
-    <div class="card my-5">
+    <div class="card my-2">
         <h5 class="card-header">Акт сверки</h5>
         <div class="card-body">
             <div class="row">
@@ -99,8 +108,13 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">За период</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <p class="card-text">Акт сверки составляется по всем услугам за период включительно.</p>
                             <form asp-controller="ReviseAct" asp-action="Index" method="get">
+                                @if (!User.IsInRole("User"))
+                                {
+                                    <label for="id">Арендатор:</label>
+                                    <select class="form-control" name="id" asp-items="Model.Tenants"></select>
+                                }
                                 <label for="from">C:</label>
                                 <input type="date" name="from" class="form-control" />
 
@@ -116,21 +130,15 @@
             </div>
         </div>
     </div>
-
-    <div class="card my-5">
-        <h5 class="card-header">Заключение договоров</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Помещения</h5>
-                            <p class="card-text">Просмотр свободных помещений, на которые возможно составление договора аренды.</p>
-                            <a asp-controller="Rooms" asp-action="Free" class="btn btn-primary">Перейти</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Добро пожаловать</h1>
+        <p>
+            Для возможности работы с системой необходимо авторизироваться.
+            Пожалуйста, <a asp-controller="Account" asp-action="Login">войдите</a> или,
+            если у Вас отсутствует аккаунт, <a asp-controller="Account" asp-action="Register">зарегестрируйтесь</a>.
+        </p>
     </div>
 }

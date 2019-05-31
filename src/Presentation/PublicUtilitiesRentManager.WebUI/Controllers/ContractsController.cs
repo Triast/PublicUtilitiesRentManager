@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.Identity.Dapper;
+﻿using AspNetCore.Identity.Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PublicUtilitiesRentManager.Domain.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PublicUtilitiesRentManager.Persistance.Interfaces;
 using PublicUtilitiesRentManager.WebUI.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: add CRUD.
     [Authorize]
     public class ContractsController : Controller
     {
@@ -49,7 +48,143 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
                 contracts = contracts.Where(c => c.TenantId == tenantObj.Id);
             }
 
-            return View(contracts);
+            return View(contracts.OrderBy(c => c.Tenant));
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Create()
+        {
+            var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
+            var rooms = (await _roomRepository.GetAllAsync()).Where(r => !r.IsOccupied).OrderBy(r => r.Address);
+            var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(t => t.Name);
+
+            var tenantsSelectList = new SelectList(tenants, "Id", "Name", tenants.First());
+            var roomsSelectList = new SelectList(rooms, "Id", "Address", rooms.First());
+            var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First());
+
+            var vm = new ContractViewModel
+            {
+                Tenants = tenantsSelectList,
+                Rooms = roomsSelectList,
+                AccrualTypes = accrualTypesSelectList
+            };
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(ContractViewModel contract)
+        {
+            contract.Id = System.Guid.NewGuid().ToString();
+            var accrual = ContractViewModel.FromContractViewModel(contract);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+            room.IsOccupied = true;
+
+            if (!ModelState.IsValid)
+            {
+                return View(contract);
+            }
+
+            try
+            {
+                await _contractRepository.AddAsync(accrual);
+                await _roomRepository.UpdateAsync(room);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+
+                var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
+                var rooms = (await _roomRepository.GetAllAsync()).Where(r => !r.IsOccupied).OrderBy(r => r.Address);
+                var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(t => t.Name);
+
+                var tenantsSelectList = new SelectList(tenants, "Id", "Name", tenants.First(t => t.Id == contract.TenantId));
+                var roomsSelectList = new SelectList(rooms, "Id", "Address", rooms.First(r => r.Id == contract.RoomId));
+                var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First(t => t.Id == contract.AccrualTypeId));
+
+                return View(contract);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Edit(string id)
+        {
+            var contract = await _contractRepository.GetByIdAsync(id);
+
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+
+            var vm = ContractViewModel.FromContract(contract);
+            vm.Tenant = tenant.Name;
+            vm.Room = room.Address;
+            vm.AccrualType = accrualType.Name;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(ContractViewModel contract)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(contract);
+            }
+
+            try
+            {
+                await _contractRepository.UpdateAsync(ContractViewModel.FromContractViewModel(contract));
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(contract);
+            }
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var contract = await _contractRepository.GetByIdAsync(id);
+
+            var tenant = await _tenantRepository.GetByIdAsync(contract.TenantId);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+            var accrualType = await _accrualTypeRepository.GetByIdAsync(contract.AccrualTypeId);
+
+            var vm = ContractViewModel.FromContract(contract);
+            vm.Tenant = tenant.Name;
+            vm.Room = room.Address;
+            vm.AccrualType = accrualType.Name;
+
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirm(string id)
+        {
+            var contract = await _contractRepository.GetByIdAsync(id);
+            var room = await _roomRepository.GetByIdAsync(contract.RoomId);
+            room.IsOccupied = false;
+
+            try
+            {
+                await _contractRepository.RemoveAsync(id);
+                await _roomRepository.UpdateAsync(room);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         private async Task<IEnumerable<ContractViewModel>> GetContractViewModels(string userId)
