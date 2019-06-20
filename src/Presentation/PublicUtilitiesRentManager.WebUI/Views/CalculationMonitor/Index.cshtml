@@ -7,16 +7,16 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-        <li class="breadcrumb-item"><a asp-controller="CalculationMonitor" asp-action="Index">Мониторинг расчётов</a></li>
+        <li class="breadcrumb-item"><a asp-controller="CalculationMonitor" asp-action="Index" asp-route-id="@Model.TenantId" asp-route-start="@Model.Start.ToString("yyyy-MM-dd")" asp-route-end="@Model.End.ToString("yyyy-MM-dd")">Мониторинг расчётов</a></li>
         <li class="breadcrumb-item active" aria-current="page">@Model.AccrualTypeName</li>
     </ol>
 </nav>
 
 <div class="text-center">
-    <h1 class="display-4">@Model.AccrualTypeName за период (@Model.Start.ToShortDateString() - @Model.End.ToShortDateString())</h1>
+    <h1>@Model.AccrualTypeName за период (@Model.Start.ToShortDateString() - @Model.End.ToShortDateString())</h1>
 </div>
 
-<a asp-action="Index" asp-route-id="@Model.TenantId" asp-route-start="@Model.Start.ToString("yyyy-MM-dd")" asp-route-end="@Model.End.ToString("yyyy-MM-dd")">Перейти к сводному</a>
+<a asp-action="Index" asp-route-id="@Model.TenantId" asp-route-start="@Model.Start.ToString("yyyy-MM-dd")" asp-route-end="@Model.End.ToString("yyyy-MM-dd")">Перейти к сводному отчёту</a>
 
 <table class="table table-sm table-responsive-md table-hover mt-2">
     <thead>

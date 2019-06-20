@@ -55,7 +55,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         public async Task<ActionResult> Create()
         {
             var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
-            var rooms = (await _roomRepository.GetAllAsync()).Where(r => !r.IsOccupied).OrderBy(r => r.Address);
+            var rooms = (await _roomRepository.GetAllAsync()).OrderBy(r => r.Address);
             var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(t => t.Name);
 
             var tenantsSelectList = new SelectList(tenants, "Id", "Name", tenants.First());
@@ -77,13 +77,35 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ContractViewModel contract)
         {
+            var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
+            var rooms = (await _roomRepository.GetAllAsync()).OrderBy(r => r.Address);
+            var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(t => t.Name);
+
+            var tenantsSelectList = new SelectList(tenants, "Id", "Name", tenants.First(t => t.Id == contract.TenantId));
+            var roomsSelectList = new SelectList(rooms, "Id", "Address", rooms.First(r => r.Id == contract.RoomId));
+            var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First(t => t.Id == contract.AccrualTypeId));
+
             contract.Id = System.Guid.NewGuid().ToString();
+            contract.Tenants = tenantsSelectList;
+            contract.Rooms = roomsSelectList;
+            contract.AccrualTypes = accrualTypesSelectList;
             var accrual = ContractViewModel.FromContractViewModel(contract);
             var room = await _roomRepository.GetByIdAsync(contract.RoomId);
-            room.IsOccupied = true;
 
             if (!ModelState.IsValid)
             {
+                return View(contract);
+            }
+
+            if (contract.AccrualTypeId == "d739e49d-6219-46e1-968d-498e80a5681c" && room.IsOccupied)
+            {
+                ModelState.AddModelError(string.Empty, "Выбранное помещение уже арендуется.");
+                return View(contract);
+            }
+            if (contract.AccrualTypeId != "d739e49d-6219-46e1-968d-498e80a5681c" && !room.IsOccupied)
+            {
+                ModelState.AddModelError(string.Empty, @"Для составления договора на
+                    сопроводительные услуги необходимо выбрать помещение, на которое составлен договор аренды.");
                 return View(contract);
             }
 
@@ -97,14 +119,6 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             catch (Exception e)
             {
                 ModelState.AddModelError("", e.Message);
-
-                var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
-                var rooms = (await _roomRepository.GetAllAsync()).Where(r => !r.IsOccupied).OrderBy(r => r.Address);
-                var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(t => t.Name);
-
-                var tenantsSelectList = new SelectList(tenants, "Id", "Name", tenants.First(t => t.Id == contract.TenantId));
-                var roomsSelectList = new SelectList(rooms, "Id", "Address", rooms.First(r => r.Id == contract.RoomId));
-                var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First(t => t.Id == contract.AccrualTypeId));
 
                 return View(contract);
             }

@@ -34,28 +34,6 @@ namespace Authentication.Controllers
         public async Task<IActionResult> Index()
         {
             var tenants = (await _tenantRepository.GetAllAsync()).ToList();
-            //var vm = _userManager.Users.Select(user => new IndexViewModel
-            //{
-            //    Email = user.Email,
-            //    PhoneNumber = user.PhoneNumber,
-            //    IsEmailConfirmed = user.EmailConfirmed,
-            //    Tenant = tenants.First(t => t.UserId == user.Id).Name,
-            //    StatusMessage = ""
-            //}).ToList();
-
-            //var users = new List<IndexViewModel>();
-
-            //foreach (var user in _userManager.Users)
-            //{
-            //    users.Add(new IndexViewModel
-            //    {
-            //        Email = user.Email,
-            //        PhoneNumber = user.PhoneNumber,
-            //        IsEmailConfirmed = user.EmailConfirmed,
-            //        Tenant = tenants.First(t => t.UserId == user.Id).Name,
-            //        StatusMessage = ""
-            //    });
-            //}
 
             return View(_userManager.Users.Select(user => new IndexViewModel
             {

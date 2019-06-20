@@ -54,6 +54,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Акт сверки</h5>
+                            <p class="card-text">Акт сверки составляется по всем услугам за период включительно.</p>
+                            <form asp-controller="ReviseAct" asp-action="Index" method="get">
+                                @if (!User.IsInRole("User"))
+                                {
+                                    <label for="id">Арендатор:</label>
+                                    <select class="form-control" name="id" asp-items="Model.Tenants"></select>
+                                }
+                                <label for="from">C:</label>
+                                <input type="date" name="from" class="form-control" />
+
+                                <label for="to">по:</label>
+                                <input type="date" name="to" class="form-control" />
+                                <br />
+
+                                <input type="submit" value="Перейти" class="btn btn-primary" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -83,7 +106,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Начисления</h5>
                             <p class="card-text">Список начислений, начисленных Вам за услуги.</p>
-                            <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                            <a asp-controller="Accruals" asp-action="Index" class="btn btn-primary">Перейти</a>
                         </div>
                     </div>
                 </div>
@@ -92,7 +115,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Оплаты</h5>
                             <p class="card-text">Список оплат, произведённых Вами за услуги.</p>
-                            <a asp-controller="Payments" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                            <a asp-controller="Payments" asp-action="Index" class="btn btn-primary">Перейти</a>
                         </div>
                     </div>
                 </div>
@@ -100,7 +123,7 @@
         </div>
     </div>
 
-    <div class="card my-2">
+    @*<div class="card my-2">
         <h5 class="card-header">Акт сверки</h5>
         <div class="card-body">
             <div class="row">
@@ -129,7 +152,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
 }
 else
 {

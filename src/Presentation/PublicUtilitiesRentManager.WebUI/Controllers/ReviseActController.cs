@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: Add authentication rules for controllers. Redesign revise act.
     public class ReviseActController : Controller
     {
         private readonly ITenantRepository _tenantRepository;

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace PublicUtilitiesRentManager.WebUI.Controllers
 {
-    // Todo: add posibility to assign tenant to user.
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -45,17 +44,19 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email,
+                    model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, await _signInManager.CreateUserPrincipalAsync(user));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        await _signInManager.CreateUserPrincipalAsync(user));
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Неверно введён логин или пароль.");
                     return View(model);
                 }
             }

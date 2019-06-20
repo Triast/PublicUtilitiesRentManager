@@ -53,9 +53,12 @@
 
 <h1>Договора</h1>
 
-<p>
-    <a asp-action="Create">Составить новый</a>
-</p>
+@if (!User.IsInRole("User"))
+{
+    <p>
+        <a asp-action="Create">Составить новый</a>
+    </p>
+}
 <table class="table table-sm table-responsive-md table-hover">
     <thead>
         <tr>

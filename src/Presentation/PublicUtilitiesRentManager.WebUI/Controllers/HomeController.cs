@@ -25,7 +25,7 @@ namespace PublicUtilitiesRentManager.WebUI.Controllers
         {
             var tenants = (await _tenantRepository.GetAllAsync()).OrderBy(t => t.Name);
             var accrualTypes = (await _accrualTypeRepository.GetAllAsync()).OrderBy(a => a.Name).ToList();
-            accrualTypes.Add(new Domain.Entities.AccrualType() { Id = null, Name = "Сводный" });
+            accrualTypes.Add(new Domain.Entities.AccrualType() { Id = null, Name = "Сводный отчёт" });
             var tenantSelectList = new SelectList(tenants, "Id", "Name", tenants.First());
             var accrualTypesSelectList = new SelectList(accrualTypes, "Id", "Name", accrualTypes.First(a => String.IsNullOrEmpty(a.Id)));
 
